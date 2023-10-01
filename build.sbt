@@ -37,7 +37,7 @@ lazy val fk_core = (project in file("fk_core"))
     libraryDependencies ++= dependencies,
   )
 
-lazy val fk_module_library = (project in file("fk_module_library"))
+lazy val fk_library = (project in file("modules/fk_library"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
   .settings(
@@ -45,7 +45,7 @@ lazy val fk_module_library = (project in file("fk_module_library"))
     libraryDependencies ++= dependencies,
   )
 
-lazy val fk_module_store = (project in file("fk_module_store"))
+lazy val fk_store = (project in file("modules/fk_store"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
   .settings(
@@ -55,7 +55,7 @@ lazy val fk_module_store = (project in file("fk_module_store"))
 
 lazy val fk_server = (project in file("fk_server"))
   .enablePlugins(PlayScala, SwaggerPlugin)
-  .dependsOn(fk_core, fk_module_library, fk_module_store)
+  .dependsOn(fk_core, fk_library, fk_store)
   .settings(
     settings,
     libraryDependencies ++= dependencies ++ Seq(
