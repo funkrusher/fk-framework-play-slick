@@ -1,8 +1,9 @@
 # server endpoints
-GET   /                           controllers.HealthcheckController.healtcheck
+GET   /                           controllers.HealthcheckController.healtcheck()
 
 # modules
 ->    /api/library                library.Routes
+->    /api/store                  store.Routes
 
 # swagger-ui
 GET /assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)
