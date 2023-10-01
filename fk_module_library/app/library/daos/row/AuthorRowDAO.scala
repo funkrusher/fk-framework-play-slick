@@ -1,4 +1,4 @@
-package daos.row
+package library.daos.row
 
 import daos.RowDAO
 import play.api.db.slick.DatabaseConfigProvider

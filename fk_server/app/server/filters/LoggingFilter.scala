@@ -1,4 +1,4 @@
-package filters
+package server.filters
 
 import akka.stream.Materializer
 import play.api.Logging

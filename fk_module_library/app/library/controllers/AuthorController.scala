@@ -1,7 +1,7 @@
-package controllers
+package library.controllers
 
-import dtos.AuthorDTO
-import managers.AuthorManager
+import library.dtos.AuthorDTO
+import library.managers.AuthorManager
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}

@@ -1,4 +1,4 @@
-package daos.view
+package library.daos.view
 
 import daos.ViewDAO
 import play.api.db.slick.DatabaseConfigProvider

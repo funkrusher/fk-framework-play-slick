@@ -1,4 +1,4 @@
-package dtos
+package library.dtos
 
 import play.api.libs.json.{Json, OFormat}
 

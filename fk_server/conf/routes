@@ -1,5 +1,5 @@
 # server endpoints
-GET   /                           controllers.HealthcheckController.healtcheck()
+GET   /                           server.controllers.HealthcheckController.healtcheck()
 
 # modules
 ->    /api/library                library.Routes

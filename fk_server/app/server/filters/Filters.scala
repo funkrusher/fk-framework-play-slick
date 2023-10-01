@@ -1,4 +1,4 @@
-package filters
+package server.filters
 
 import play.api.http.{DefaultHttpFilters, EnabledFilters}
 import play.filters.gzip.GzipFilter

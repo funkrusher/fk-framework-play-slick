@@ -1,8 +1,8 @@
-package managers
+package library.managers
 
-import daos.row.{AuthorRowDAO, BookRowDAO, BookStoreRowDAO}
-import daos.view.AuthorViewDAO
-import dtos.{AuthorDTO, AuthorPaginateDTO, BookDTO, BookStoreDTO}
+import library.daos.row.{AuthorRowDAO, BookRowDAO, BookStoreRowDAO}
+import library.daos.view.AuthorViewDAO
+import library.dtos.{AuthorDTO, AuthorPaginateDTO, BookDTO, BookStoreDTO}
 import manager.Manager
 import manager.errors.ManagerError
 import persistence.DbRunner

@@ -31,6 +31,7 @@ lazy val fk_codegen = (project in file("fk_codegen"))
   )
 
 lazy val fk_core = (project in file("fk_core"))
+  .enablePlugins(PlayScala)
   .settings(
     settings,
     libraryDependencies ++= dependencies,
