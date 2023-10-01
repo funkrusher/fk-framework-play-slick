@@ -3,23 +3,18 @@ import com.typesafe.config.ConfigFactory
 name := "fk-framework-play-slick"
 
 lazy val settings = Seq(
-    organization := "org.fk",
-    version := "1.0-SNAPSHOT",
-    scalaVersion := "2.13.8",
+  organization := "org.fk",
+  version := "1.0-SNAPSHOT",
+  scalaVersion := "2.13.8",
 )
 
 lazy val dependencies = Seq(
-    guice,
-    jdbc,
-    "com.typesafe.play" %% "play-slick" % "5.1.0",
-    "com.typesafe.play" %% "play-slick-evolutions" % "5.1.0",
-    "com.typesafe.slick" %% "slick-codegen" % "3.4.1",
-    "org.mariadb.jdbc" % "mariadb-java-client" % "3.1.2",
-    "org.scalaz" %% "scalaz-core" % "7.3.2",
-    "org.webjars" % "swagger-ui" % "4.11.1",
-    "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.39.3",
-    "com.dimafeng" %% "testcontainers-scala-mariadb" % "0.39.3",
-    specs2 % Test
+  guice,
+  "com.typesafe.play" %% "play-slick"            % "5.1.0",
+  "com.typesafe.play" %% "play-slick-evolutions" % "5.1.0",
+  "org.mariadb.jdbc"   % "mariadb-java-client"   % "3.1.2",
+  "org.scalaz"        %% "scalaz-core"           % "7.3.2",
+  specs2               % Test,
 )
 
 // define projects
@@ -27,27 +22,32 @@ lazy val dependencies = Seq(
 lazy val fk_codegen = (project in file("fk_codegen"))
   .settings(
     settings,
-    libraryDependencies ++= dependencies,
+    libraryDependencies ++= dependencies ++ Seq(
+      jdbc,
+      "com.typesafe.slick" %% "slick-codegen"                  % "3.4.1",
+      "com.dimafeng"       %% "testcontainers-scala-scalatest" % "0.39.3",
+      "com.dimafeng"       %% "testcontainers-scala-mariadb"   % "0.39.3",
+    ),
   )
 
 lazy val fk_core = (project in file("fk_core"))
   .settings(
     settings,
-    libraryDependencies ++= dependencies
+    libraryDependencies ++= dependencies,
   )
 
 lazy val fk_module_library = (project in file("fk_module_library"))
   .dependsOn(fk_core)
   .settings(
     settings,
-    libraryDependencies ++= dependencies
+    libraryDependencies ++= dependencies,
   )
 
 lazy val fk_module_store = (project in file("fk_module_store"))
   .dependsOn(fk_core)
   .settings(
     settings,
-    libraryDependencies ++= dependencies
+    libraryDependencies ++= dependencies,
   )
 
 lazy val fk_server = (project in file("fk_server"))
@@ -57,12 +57,15 @@ lazy val fk_server = (project in file("fk_server"))
   .dependsOn(fk_module_store)
   .settings(
     settings,
-    libraryDependencies ++= dependencies,
+    libraryDependencies ++= dependencies ++ Seq(
+      "org.webjars" % "swagger-ui" % "4.11.1"
+    ),
     PlayKeys.playDefaultPort := 9000,
-    swaggerDomainNameSpaces := Seq("dtos")
+    swaggerDomainNameSpaces := Seq("dtos"),
   )
 
-lazy val root = project.in(file("."))
+lazy val root = project
+  .in(file("."))
   .dependsOn(fk_server, fk_codegen)
   .aggregate(fk_server, fk_codegen)
   .settings(settings)

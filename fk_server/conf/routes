@@ -2,7 +2,7 @@
 GET   /                           controllers.HealthcheckController.healtcheck
 
 # modules
-->    /api/library                routes_module_library.Routes
+->    /api/library                library.Routes
 
 # swagger-ui
 GET /assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)
