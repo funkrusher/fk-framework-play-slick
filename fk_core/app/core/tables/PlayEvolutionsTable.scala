@@ -20,7 +20,9 @@ trait PlayEvolutionsTable {
   /** GetResult implicit for fetching PlayEvolutionsRow objects using plain SQL queries */
   implicit def GetResultPlayEvolutionsRow(implicit e0: GR[Int], e1: GR[String], e2: GR[java.sql.Timestamp], e3: GR[Option[String]]): GR[PlayEvolutionsRow] = GR{
     prs => import prs._
-    PlayEvolutionsRow.tupled((<<[Int], <<[String], <<[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String]))
+    val r = (<<[Int], <<[String], <<[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String])
+    import r._
+    PlayEvolutionsRow.tupled((_1, _2, _3, _4, _5, _6, _7)) // putting AutoInc last
   }
   /** Table description of table play_evolutions. Objects of this class serve as prototypes for rows in queries. */
   class PlayEvolutions(_tableTag: Tag) extends profile.api.Table[PlayEvolutionsRow](_tableTag, Some("mylibrary"), "play_evolutions") {

@@ -10,6 +10,9 @@ class SimpleCodeGenerator(model: slick.model.Model) extends SourceCodeGenerator(
 
   override def Table = {
     new Table(_) {
+
+      override val autoIncLastAsOption = true
+
       // override contained column generator
       override def Column =
         new Column(_) {
@@ -22,12 +25,13 @@ class SimpleCodeGenerator(model: slick.model.Model) extends SourceCodeGenerator(
 
           // we currently don't need default-values in the columns of the table-definition, let's disable those,
           // until following is fixed: https://github.com/slick/slick/issues/2827
-          override def columnOptionCode = { option => {
-            option match {
-              case Default(_) => None // we currently don't need defaults.
-              case _ => super.columnOptionCode(option) // we still need other options!
+          override def columnOptionCode = { option =>
+            {
+              option match {
+                case Default(_) => None                           // we currently don't need defaults.
+                case _          => super.columnOptionCode(option) // we still need other options!
+              }
             }
-          }
           }
         }
     }

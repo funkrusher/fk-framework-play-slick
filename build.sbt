@@ -62,16 +62,17 @@ lazy val fk_server = (project in file("fk_server"))
       "org.webjars" % "swagger-ui" % "4.11.1"
     ),
     PlayKeys.playDefaultPort := 9000,
-    swaggerDomainNameSpaces := Seq("dtos"),
+    swaggerPrettyJson := true,
+    swaggerDomainNameSpaces := Seq("library.dtos"),
   )
 
 lazy val root = project
   .in(file("."))
   .dependsOn(fk_server, fk_codegen)
-  .aggregate(fk_server, fk_codegen)
+  .aggregate(fk_server)
   .settings(settings)
 
-TaskKey[Unit]("codegen") := (Compile / runMain).toTask(" codegen.SlickCodegenApp").value
+TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value
 
 addCommandAlias("fk_codegen", ";project fk_codegen;compile;run")
 addCommandAlias("fk_server", ";project fk_server;compile;run")

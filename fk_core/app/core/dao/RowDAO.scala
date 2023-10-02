@@ -1,5 +1,6 @@
 package daos
 
+import core.dao.ReflectionHelper
 import slick.lifted.AbstractTable
 
 import java.lang.reflect.Method
@@ -13,17 +14,15 @@ abstract class RowDAO[V <: AbstractTable[T], T <: V#TableElementType, X: TypeTag
 
   def tableQuery: TableQuery[V]
 
-
   case class Id[U: TypeTag](tableQuery: TableQuery[_], columnName: String) {
     val table = tableQuery.baseTableRow.asInstanceOf[Table[_]]
 
     def idType = typeOf[U]
 
-    def reflector: Method = prepareReflector(table, columnName)
+    def reflector: Method = ReflectionHelper.prepareReflector(table, columnName)
   }
 
   def resolveIdValue(obj: Any): X = id.reflector.invoke(obj).asInstanceOf[X]
-
 
   def resolveIdFilter(searchId: X, filterSource: Any): Rep[Option[Boolean]] = {
     val obj = id.reflector.invoke(filterSource)
@@ -35,7 +34,6 @@ abstract class RowDAO[V <: AbstractTable[T], T <: V#TableElementType, X: TypeTag
     RepFilterResolver.resolve(obj, searchIds.mkString(","), typeOf[X], "in")
   }
 
-
   def select(id: X): DBIO[Option[V#TableElementType]] = {
     val query = tableQuery.filter(filterSource => {
       resolveIdFilter(id, filterSource)
@@ -43,7 +41,6 @@ abstract class RowDAO[V <: AbstractTable[T], T <: V#TableElementType, X: TypeTag
     val result: DBIO[Option[V#TableElementType]] = query.result.headOption
     result
   }
-
 
   def selectAll(ids: Seq[X]): DBIO[Seq[V#TableElementType]] = {
     val query = tableQuery.filter(filterSource => {
@@ -59,23 +56,24 @@ abstract class RowDAO[V <: AbstractTable[T], T <: V#TableElementType, X: TypeTag
     val tq = tableQuery
     val tx = id.idType match {
       case t if t =:= typeOf[Option[String]] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[String]]])
-      case t if t =:= typeOf[String] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[String]])
-      case t if t =:= typeOf[Option[Int]] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[Int]]])
-      case t if t =:= typeOf[Int] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Int]])
-      case t if t =:= typeOf[Option[Long]] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[Long]]])
-      case t if t =:= typeOf[Long] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Long]])
-      case _ => tq
+      case t if t =:= typeOf[String]         => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[String]])
+      case t if t =:= typeOf[Option[Int]]    => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[Int]]])
+      case t if t =:= typeOf[Int]            => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Int]])
+      case t if t =:= typeOf[Option[Long]]   => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[Long]]])
+      case t if t =:= typeOf[Long]           => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Long]])
+      case _                                 => tq
     }
-    ((tq returning tx) into ((_, idValue) => idValue.asInstanceOf[X]) += row)
+    ((tq.returning(tx)).into((_, idValue) => idValue.asInstanceOf[X]) += row)
   }
-
 
   def insertAll(rows: Seq[T]): DBIO[Option[Int]] = tableQuery ++= rows
 
   def delete(id: X): DBIO[Int] = {
-    val query = tableQuery.filter(filterSource => {
-      resolveIdFilter(id, filterSource)
-    }).asInstanceOf[Query[Table[T], Table[T]#TableElementType, Seq]]
+    val query = tableQuery
+      .filter(filterSource => {
+        resolveIdFilter(id, filterSource)
+      })
+      .asInstanceOf[Query[Table[T], Table[T]#TableElementType, Seq]]
     query.delete
   }
 
@@ -87,9 +85,9 @@ abstract class RowDAO[V <: AbstractTable[T], T <: V#TableElementType, X: TypeTag
     query.update(row)
   }
 
-
   def toRowMap[A, B](seq: Seq[(A, B)]): Map[A, Seq[B]] = {
     // create a grouped map, which is grouped by an id and contains a seq of items for each id
     seq.groupBy(_._1).map(x => (x._1, x._2.map(_._2)))
   }
+
 }

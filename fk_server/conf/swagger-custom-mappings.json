@@ -1,0 +1,11 @@
+[{
+  "type": "integer",
+  "specAsParameter": [{
+    "type": "string",
+    "format": "date"
+  }],
+  "specAsProperty": {
+    "type": "string",
+    "format": "date"
+  }
+}]

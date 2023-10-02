@@ -16,7 +16,9 @@ trait BookToBookStoreTable {
   /** GetResult implicit for fetching BookToBookStoreRow objects using plain SQL queries */
   implicit def GetResultBookToBookStoreRow(implicit e0: GR[String], e1: GR[Int], e2: GR[Option[Int]]): GR[BookToBookStoreRow] = GR{
     prs => import prs._
-    BookToBookStoreRow.tupled((<<[String], <<[Int], <<?[Int]))
+    val r = (<<[String], <<[Int], <<?[Int])
+    import r._
+    BookToBookStoreRow.tupled((_1, _2, _3)) // putting AutoInc last
   }
   /** Table description of table book_to_book_store. Objects of this class serve as prototypes for rows in queries. */
   class BookToBookStore(_tableTag: Tag) extends profile.api.Table[BookToBookStoreRow](_tableTag, Some("mylibrary"), "book_to_book_store") {

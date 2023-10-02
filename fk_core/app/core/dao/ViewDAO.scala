@@ -1,7 +1,11 @@
 package daos
 
-import slick.lifted.{AbstractTable, ColumnOrdered}
-import util.{QueryParamFilterModel, QueryParamModel, QueryParamSorterModel}
+import core.dao.ReflectionHelper
+import slick.lifted.AbstractTable
+import slick.lifted.ColumnOrdered
+import util.QueryParamFilterModel
+import util.QueryParamModel
+import util.QueryParamSorterModel
 
 import java.lang.reflect.Method
 import scala.reflect.runtime.universe._
@@ -14,7 +18,7 @@ abstract class ViewDAO extends DAO {
 
     val table = tableQuery.baseTableRow.asInstanceOf[Table[_]]
 
-    def reflector: Method = prepareReflector(table, columnName)
+    def reflector: Method = ReflectionHelper.prepareReflector(table, columnName)
   }
 
   case class Filter[T: TypeTag](tableQuery: TableQuery[_], columnName: String, filterComparator: String) {
@@ -22,30 +26,29 @@ abstract class ViewDAO extends DAO {
 
     def filterType = typeOf[T]
 
-    def reflector: Method = prepareReflector(table, columnName)
+    def reflector: Method = ReflectionHelper.prepareReflector(table, columnName)
   }
 
-
   def createConditionList(
-                           filters: Seq[(Filter[_], QueryParamFilterModel)],
-                           table: AnyRef,
-                         ): List[Rep[Option[Boolean]]] = {
+      filters: Seq[(Filter[_], QueryParamFilterModel)],
+      table: AnyRef,
+  ): List[Rep[Option[Boolean]]] = {
     filters
       .map(orFilter => {
-        val filter = orFilter._2
+        val filter       = orFilter._2
         val columnFilter = orFilter._1
-        val obj = columnFilter.reflector.invoke(table)
+        val obj          = columnFilter.reflector.invoke(table)
         RepFilterResolver.resolve(obj, filter.filterValue, orFilter._1.filterType, orFilter._1.filterComparator)
       })
       .toList
   }
 
   def createConditions(
-                        activeFilters: Option[Seq[(Filter[_], QueryParamFilterModel)]],
-                        table: AnyRef,
-                      ): Rep[Option[Boolean]] = {
+      activeFilters: Option[Seq[(Filter[_], QueryParamFilterModel)]],
+      table: AnyRef,
+  ): Rep[Option[Boolean]] = {
     if (activeFilters.isDefined && activeFilters.get.size > 0) {
-      val list = createConditionList(activeFilters.get, table)
+      val list                               = createConditionList(activeFilters.get, table)
       val andCondition: Rep[Option[Boolean]] = list.reduceLeftOption((x, y) => x && y).getOrElse(NEVER_TRUE.?)
       andCondition
     } else {
@@ -54,13 +57,13 @@ abstract class ViewDAO extends DAO {
   }
 
   def createSorting(
-                     activeSorter: Option[(Sorter[_], QueryParamSorterModel)],
-                     table: AnyRef,
-                   ): Either[java.lang.Throwable, ColumnOrdered[Any]] = {
+      activeSorter: Option[(Sorter[_], QueryParamSorterModel)],
+      table: AnyRef,
+  ): Either[java.lang.Throwable, ColumnOrdered[Any]] = {
     if (activeSorter.isDefined) {
-      val sorter = activeSorter.get._2
+      val sorter       = activeSorter.get._2
       val columnSorter = activeSorter.get._1
-      val obj = columnSorter.reflector.invoke(table)
+      val obj          = columnSorter.reflector.invoke(table)
       Right(RepSortByResolver.resolve(obj, sorter.sortOrder))
     } else {
       Left(new Exception("active sorter could not be found in query-params."))
@@ -68,9 +71,9 @@ abstract class ViewDAO extends DAO {
   }
 
   def resolveActiveFilters(
-                            tableQueryFilters: Seq[QueryParamFilterModel],
-                            columnFilters: Seq[Filter[_]],
-                          ): Seq[(Filter[_], QueryParamFilterModel)] = {
+      tableQueryFilters: Seq[QueryParamFilterModel],
+      columnFilters: Seq[Filter[_]],
+  ): Seq[(Filter[_], QueryParamFilterModel)] = {
     val result = tableQueryFilters
       .map(tableQueryFilter => {
         val maybeFound = columnFilters.find(x =>
@@ -78,7 +81,7 @@ abstract class ViewDAO extends DAO {
         )
         maybeFound match {
           case Some(found: Filter[_]) => Some((found, tableQueryFilter))
-          case _ => None
+          case _                      => None
         }
       })
       .collect({ case Some(it) => it })
@@ -86,25 +89,25 @@ abstract class ViewDAO extends DAO {
   }
 
   def resolveActiveSorter(
-                           tableQuerySorter: QueryParamSorterModel,
-                           columnSorters: Seq[Sorter[_]],
-                         ) = {
+      tableQuerySorter: QueryParamSorterModel,
+      columnSorters: Seq[Sorter[_]],
+  ) = {
     val maybeFound = columnSorters.find(x =>
       x.columnName == tableQuerySorter.sortName && x.table.tableName == tableQuerySorter.tableName
     )
     maybeFound match {
       case Some(found: Sorter[_]) => Some((found, tableQuerySorter))
-      case _ => None
+      case _                      => None
     }
   }
-
 
   implicit class FilterQuery[A <: AbstractTable[_]](q: TableQuery[A]) {
     def applyFilters(qParam: QueryParamModel, filters: Seq[Filter[_]]): Query[A, Any, Seq] = {
       val table = q.baseTableRow.asInstanceOf[Table[_]]
 
       // find filters
-      val resolvedActiveFilters = qParam.filters.map(qFilters => resolveActiveFilters(qFilters, filters)).getOrElse(Seq())
+      val resolvedActiveFilters =
+        qParam.filters.map(qFilters => resolveActiveFilters(qFilters, filters)).getOrElse(Seq())
 
       var resultQuery: Query[A, Any, Seq] = q.filter(x => ALWAYS_TRUE).asInstanceOf[Query[A, Any, Seq]]
 
@@ -118,7 +121,6 @@ abstract class ViewDAO extends DAO {
       resultQuery
     }
   }
-
 
   implicit class SortQuery[E <: Product, U <: Product](q: Query[E, U, Seq]) {
     def applySorter(qParam: QueryParamModel, sorters: Seq[Sorter[_]]): Query[E, U, Seq] = {

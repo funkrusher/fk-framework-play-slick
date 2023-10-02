@@ -18,3 +18,9 @@ Wichtig:
 "sbt swagger" ausführen.
 danach im browser:
 - http://localhost:9000/assets/swagger-ui/index.html
+
+Multi-Module Project Routes/Play project split:
+- https://www.playframework.com/documentation/2.8.3/sbtSubProjects#Working-with-sub-projects
+
+Compilation-Speed:
+- https://www.playframework.com/documentation/2.8.3/CompilationSpeed

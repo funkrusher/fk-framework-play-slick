@@ -1,4 +1,19 @@
 # /api/library
+
+
 GET   /author/paginate            controllers.AuthorController.paginate
+
+ ###
+ #  summary: Create Author
+ #  tags:
+ #    - Author Endpoints
+ #  parameters:
+ #    - name: body
+ #      schema:
+ #        $ref: '#/definitions/library.dtos.AuthorDTO'
+ ###
 POST  /author/add                 controllers.AuthorController.addAuthor
+
 POST  /author/delete/:id          controllers.AuthorController.deleteAuthor(id: Int)
+
+PUT   /bookToBookStore/update     controllers.BookToBookStoreController.update

@@ -9,7 +9,8 @@ import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class BookRowDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends RowDAO[Book, BookRow, Int] {
+class BookRowDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+    extends RowDAO[Book, BookRow, Int] {
 
   import profile.api._
 
