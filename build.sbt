@@ -74,5 +74,4 @@ lazy val root = project
 
 TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value
 
-addCommandAlias("fk_codegen", ";project fk_codegen;compile;run")
 addCommandAlias("fk_server", ";project fk_server;compile;run")
