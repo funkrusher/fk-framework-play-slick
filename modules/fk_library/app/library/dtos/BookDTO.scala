@@ -1,16 +1,17 @@
 package library.dtos
 
-import play.api.libs.json.{Json, OFormat}
-import tables.Tables._
+import play.api.libs.json.Json
+import play.api.libs.json.OFormat
+import core.tables.Tables._
 
 case class BookDTO(
-                    id: Int,
-                    author_id: Int,
-                    title: String,
-                    published_in: Int,
-                    language_id: Int,
-                    bookStores: Option[Seq[BookStoreDTO]]
-                    )
+    id: Option[Int],
+    author_id: Int,
+    title: String,
+    published_in: Int,
+    language_id: Int,
+    bookStores: Option[Seq[BookStoreDTO]],
+)
 
 object BookDTO {
   implicit val fmt: OFormat[BookDTO] = Json.format[BookDTO]
@@ -22,7 +23,7 @@ object BookDTO {
       title = row.title,
       published_in = row.published_in,
       language_id = row.language_id,
-      bookStores = None
+      bookStores = None,
     )
   }
 }

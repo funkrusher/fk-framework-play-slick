@@ -2,9 +2,9 @@ package core.dao
 
 import slick.lifted.AbstractTable
 import slick.lifted.ColumnOrdered
-import util.QueryParamFilterModel
-import util.QueryParamModel
-import util.QueryParamSorterModel
+import core.util.QueryParamFilterModel
+import core.util.QueryParamModel
+import core.util.QueryParamSorterModel
 import slick.ast.Ordering
 
 import java.lang.reflect.Method

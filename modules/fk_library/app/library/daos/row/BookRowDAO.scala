@@ -1,8 +1,8 @@
 package library.daos.row
 
-import daos.RowDAO
+import core.dao.SingleKeyRowDAO
 import play.api.db.slick.DatabaseConfigProvider
-import tables.Tables._
+import core.tables.Tables._
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -10,18 +10,32 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class BookRowDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
-    extends RowDAO[Book, BookRow, Int] {
+    extends SingleKeyRowDAO[Book, BookRow, Int] {
 
   import profile.api._
 
-  override def tableQuery = tables.Tables.Book
+  override def config: SingleKeyQueryConfig =
+    new SingleKeyQueryConfig(Book) {
 
-  override def id = Id[Int](tableQuery, "id")
+      override def filterId(q: RowQuery, id: RowId): FilteredRowQuery = q.filter(_.id === id)
+
+      override def filterIds(q: RowQuery, ids: Seq[RowId]): FilteredRowQuery = q.filter(_.id.inSet(ids))
+
+      override def mapId(q: RowQuery): RowIdQuery = q.map(_.id)
+
+      override def putIdToRow(id: RowId, row: Row): Row = row.copy(id = Some(id))
+
+      override def getIdFromRow(row: Row): RowId = row.id.get
+    }
 
   def fetchBooksByAuthorId(authorIds: Seq[Int]): DBIO[Map[Int, Seq[BookRow]]] = {
     val action = for {
       book <- Book.filter(_.author_id.inSet(authorIds))
     } yield (book.author_id, book)
     action.result.map(toRowMap)
+  }
+
+  def deleteByAuthor(authorId: Int) = {
+    Book.filter(_.author_id === authorId).delete
   }
 }

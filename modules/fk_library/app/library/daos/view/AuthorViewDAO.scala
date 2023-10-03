@@ -1,17 +1,17 @@
 package library.daos.view
 
-import daos.ViewDAO
+import core.dao.ViewDAO
 import play.api.db.slick.DatabaseConfigProvider
-import tables.Tables._
+import core.tables.Tables._
 
 import javax.inject.Inject
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
-import util.QueryParamModel
+import core.util.QueryParamModel
 
 @Singleton
-class AuthorViewDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
-  extends ViewDAO {
+class AuthorViewDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+    extends ViewDAO {
 
   import profile.api._
 
@@ -35,19 +35,24 @@ class AuthorViewDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     Sorter[String](Book, "title"),
   )
 
-  def getFilterQuery(qParam: QueryParamModel) = for {
-    author <- Author.applyFilters(qParam, authorFilters)
-    book <- Book.applyFilters(qParam, bookFilters) if book.author_id === author.id
-    bookToBookStore <- BookToBookStore if bookToBookStore.book_id === book.id
-    bookStore <- BookStore if bookStore.name === bookToBookStore.name
-  } yield (author, book, bookToBookStore, bookStore)
+  def getFilterQuery(qParam: QueryParamModel) =
+    for {
+      author          <- Author.applyFilters(qParam, authorFilters)
+      book            <- Book.applyFilters(qParam, bookFilters) if book.author_id === author.id
+      bookToBookStore <- BookToBookStore if bookToBookStore.book_id === book.id
+      bookStore       <- BookStore if bookStore.name === bookToBookStore.name
+    } yield (author, book, bookToBookStore, bookStore)
 
-  def paginate(qParam: QueryParamModel): DBIO[Seq[Int]] = getFilterQuery(qParam)
-    .applySorter(qParam, sorters)
-    .map(_._1.id)
-    .paginate(qParam)
+  def paginate(qParam: QueryParamModel): DBIO[Seq[Int]] =
+    getFilterQuery(qParam)
+      .applySorter(qParam, sorters)
+      .map(_._1.id)
+      .paginate(qParam)
 
-  def paginateCount(qParam: QueryParamModel): DBIO[Int] = getFilterQuery(qParam)
-    .map(_._1.id)
-    .distinct.length.result
+  def paginateCount(qParam: QueryParamModel): DBIO[Int] =
+    getFilterQuery(qParam)
+      .map(_._1.id)
+      .distinct
+      .length
+      .result
 }

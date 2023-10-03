@@ -1,9 +1,8 @@
 package library.dtos
 
-import play.api.db.slick.HasDatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.libs.json.OFormat
-import tables.Tables._
+import core.tables.Tables._
 
 case class BookToBookStoreDTO(
     name: String,

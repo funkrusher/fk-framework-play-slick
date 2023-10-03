@@ -10,9 +10,9 @@ import play.api.mvc.AbstractController
 import play.api.mvc.Action
 import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
-import util.QueryParamFilterModel
-import util.QueryParamModel
-import util.QueryParamSorterModel
+import core.util.QueryParamFilterModel
+import core.util.QueryParamModel
+import core.util.QueryParamSorterModel
 
 import javax.inject.Inject
 import javax.inject.Singleton
