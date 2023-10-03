@@ -8,12 +8,15 @@ lazy val settings = Seq(
   scalaVersion := "2.13.8",
 )
 
+val swagger = "1.6.1"
+
 lazy val dependencies = Seq(
   guice,
   "com.typesafe.play" %% "play-slick"            % "5.1.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "5.1.0",
   "org.mariadb.jdbc"   % "mariadb-java-client"   % "3.1.2",
   "org.scalaz"        %% "scalaz-core"           % "7.3.2",
+  "io.swagger"         % "swagger-annotations"   % swagger,
   specs2               % Test,
 )
 
@@ -56,16 +59,12 @@ lazy val fk_store = (project in file("modules/fk_store"))
   )
 
 lazy val fk_server = (project in file("fk_server"))
-  .enablePlugins(PlayScala, SwaggerPlugin)
+  .enablePlugins(PlayScala)
   .dependsOn(fk_core, fk_library, fk_store)
   .settings(
     settings,
-    libraryDependencies ++= dependencies ++ Seq(
-      "org.webjars" % "swagger-ui" % "4.11.1"
-    ),
+    libraryDependencies ++= dependencies,
     PlayKeys.playDefaultPort := 9000,
-    swaggerPrettyJson := true,
-    swaggerDomainNameSpaces := Seq("library.dtos"),
   )
 
 lazy val root = project

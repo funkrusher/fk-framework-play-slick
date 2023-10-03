@@ -1,5 +1,8 @@
 package core.util
 
+import play.api.libs.json.Json
+import play.api.libs.json.OFormat
+
 case class QueryParamModel(
     drop: Option[Int],
     take: Option[Int],
@@ -24,7 +27,7 @@ case class QueryParamModel(
 }
 
 object QueryParamModel {
-  //implicit lazy val fmt = Json.format[QueryParamModel]
+  implicit val fmt: OFormat[QueryParamModel] = Json.format[QueryParamModel]
 }
 
 case class QueryParamSorterModel(
@@ -34,7 +37,7 @@ case class QueryParamSorterModel(
 )
 
 object QueryParamSorterModel {
-  //implicit lazy val fmt = Json.format[QueryParamSorterModel]
+  implicit val fmt: OFormat[QueryParamSorterModel] = Json.format[QueryParamSorterModel]
 }
 
 case class QueryParamFilterModel(
@@ -45,5 +48,5 @@ case class QueryParamFilterModel(
 )
 
 object QueryParamFilterModel {
-  //implicit lazy val fmt = Json.format[QueryParamFilterModel]
+  implicit val fmt: OFormat[QueryParamFilterModel] = Json.format[QueryParamFilterModel]
 }

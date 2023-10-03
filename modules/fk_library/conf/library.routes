@@ -1,7 +1,7 @@
 # /api/library
 
 
-GET   /author/paginate            controllers.AuthorController.paginate
+GET   /author/paginate            library.controllers.AuthorController.paginate
 
  ###
  #  summary: Create Author
@@ -12,8 +12,8 @@ GET   /author/paginate            controllers.AuthorController.paginate
  #      schema:
  #        $ref: '#/definitions/library.dtos.AuthorDTO'
  ###
-POST  /author/add                 controllers.AuthorController.addAuthor
+POST  /author/add                 library.controllers.AuthorController.addAuthor
 
-POST  /author/delete/:id          controllers.AuthorController.deleteAuthor(id: Int)
+POST  /author/delete/:id          library.controllers.AuthorController.deleteAuthor(id: Int)
 
-PUT   /bookToBookStore/update     controllers.BookToBookStoreController.update
+PUT   /bookToBookStore/update     library.controllers.BookToBookStoreController.update
