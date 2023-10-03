@@ -1,3 +1,23 @@
+# Fk-Framework: Best-Practices for a Play-Framework Multi-Module-Project with Slick
+
+This is a minimal CRUD service exposing a couple of endpoints over REST.
+
+Under the hood, the code is using:
+- Play-Framework
+  - Swagger-UI Support
+  - Db-Migrations
+- Slick-Framework
+  - Object Oriented Querying on the database
+  - Db-Schema-To-Code-Generator
+- Mariadb-Testcontainer for Code-Generator
+- Sbt Build
+  - Multi-Module project for shared-libraries approach
+- Customizable Helpers
+  - own DAO-Abstraction that you can extend from and fine tune.
+  - own RemotePagination Case-Class to use for remote pagination
+
+In the folder `./docs` you can find specific documentations about the different concepts this small seed-project implements, so you can benefit from them.
+
 # Slick with Flyway, Scala and Play-Framework Example
 
 Dieses Beispielprojekt demonstriert die Verwendung von slick in einer Scala / Play-Framework Umgebung. 

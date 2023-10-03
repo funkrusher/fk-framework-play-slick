@@ -1,3 +1,3 @@
-package persistence.errors
+package core.persistence.errors
 
 case class DbError(message: String)

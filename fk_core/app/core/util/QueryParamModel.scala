@@ -1,4 +1,4 @@
-package util
+package core.util
 
 case class QueryParamModel(
     drop: Option[Int],

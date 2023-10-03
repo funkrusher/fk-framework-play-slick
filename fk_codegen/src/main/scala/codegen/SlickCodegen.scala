@@ -37,7 +37,7 @@ class SlickCodegen {
     val password     = "codegen"
     val slickDriver  = "slick.jdbc.MySQLProfile"
     val jdbcDriver   = "org.mariadb.jdbc.Driver"
-    val outputDir    = "./fk_core/app/core"
+    val outputDir    = "./fk_core/app"
     val pkg          = "tables"
 
     // Define the MariaDB test container
@@ -90,7 +90,12 @@ class SlickCodegen {
       try {
         println("SlickCodegen - creating files...")
         val codegen: SourceCodeGenerator = Await.result(future, Duration.create(5, TimeUnit.MINUTES))
-        codegen.writeToMultipleFiles(profile = slickDriver, folder = outputDir, pkg = "tables", container = "Tables")
+        codegen.writeToMultipleFiles(
+          profile = slickDriver,
+          folder = outputDir,
+          pkg = "core.tables",
+          container = "Tables",
+        )
         println("SlickCodegen - creating files done!")
       } catch {
         case e: Exception =>

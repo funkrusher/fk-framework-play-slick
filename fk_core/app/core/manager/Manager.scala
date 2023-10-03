@@ -1,7 +1,7 @@
-package manager
+package core.manager
 
-import manager.errors.ManagerError
-import persistence.errors.DbError
+import core.manager.errors.ManagerError
+import core.persistence.errors.DbError
 
 abstract class Manager {
 

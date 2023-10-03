@@ -1,89 +1,58 @@
-package daos
+package core.dao
 
-import core.dao.ReflectionHelper
 import slick.lifted.AbstractTable
 
-import java.lang.reflect.Method
-import scala.reflect.runtime.universe._
-
-abstract class RowDAO[V <: AbstractTable[T], T <: V#TableElementType, X: TypeTag] extends DAO {
+abstract class RowDAO[V <: AbstractTable[Row], Row <: V#TableElementType, I <: Any] extends DAO {
 
   import profile.api._
 
-  def id: Id[X]
+  def builder: RowQueryBuilder
 
-  def tableQuery: TableQuery[V]
+  trait RowQueryBuilder {
+    type Q = TableQuery[V]
 
-  case class Id[U: TypeTag](tableQuery: TableQuery[_], columnName: String) {
-    val table = tableQuery.baseTableRow.asInstanceOf[Table[_]]
+    type R = Row
 
-    def idType = typeOf[U]
+    type QResult = Query[Table[Row], Table[Row]#TableElementType, Seq]
 
-    def reflector: Method = ReflectionHelper.prepareReflector(table, columnName)
+    type IdQResult = Query[Rep[I], I, Seq]
+
+    def query: Q
+
+    // ---------------------------------------
+    // Abstract Functions (to be implemented!)
+    // ---------------------------------------
+
+    def idQuery(query: Q, id: Option[I]): QResult
+
+    def idSetQuery(query: Q, ids: Seq[I]): QResult
+
+    def idMapQuery(query: Q): IdQResult
+
+    def idFromRow(row: R): Option[I]
+
+    def idToRow(id: Option[I], row: R): R
+
   }
 
-  def resolveIdValue(obj: Any): X = id.reflector.invoke(obj).asInstanceOf[X]
+  // ------------------------------------
+  // Functions that are already available
+  // ------------------------------------
 
-  def resolveIdFilter(searchId: X, filterSource: Any): Rep[Option[Boolean]] = {
-    val obj = id.reflector.invoke(filterSource)
-    RepFilterResolver.resolve(obj, searchId.toString, typeOf[X], "equal")
-  }
+  def select(id: I): DBIO[Option[Row]] = builder.idQuery(builder.query, Some(id)).result.headOption
 
-  def resolveIdInSetFilter(searchIds: Seq[X], filterSource: Any): Rep[Option[Boolean]] = {
-    val obj = id.reflector.invoke(filterSource)
-    RepFilterResolver.resolve(obj, searchIds.mkString(","), typeOf[X], "in")
-  }
+  def selectAll(ids: Seq[I]): DBIO[Seq[Row]] = builder.idSetQuery(builder.query, ids).result
 
-  def select(id: X): DBIO[Option[V#TableElementType]] = {
-    val query = tableQuery.filter(filterSource => {
-      resolveIdFilter(id, filterSource)
-    })
-    val result: DBIO[Option[V#TableElementType]] = query.result.headOption
-    result
-  }
+  def insert(row: Row): DBIO[Int] = builder.query += row
 
-  def selectAll(ids: Seq[X]): DBIO[Seq[V#TableElementType]] = {
-    val query = tableQuery.filter(filterSource => {
-      resolveIdInSetFilter(ids, filterSource)
-    })
-    val result: DBIO[Seq[V#TableElementType]] = query.result
-    result
-  }
+  def insertAll(rows: Seq[Row]): DBIO[Option[Int]] = builder.query ++= rows
 
-  def insert(row: T): DBIO[Int] = tableQuery += row
+  def insertAndReturn(row: Row) =
+    builder.query.returning(builder.idMapQuery(builder.query)).into((_, id) => builder.idToRow(Some(id), row)) += row
 
-  def insertReturnId(row: T): DBIO[X] = {
-    val tq = tableQuery
-    val tx = id.idType match {
-      case t if t =:= typeOf[Option[String]] => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[String]]])
-      case t if t =:= typeOf[String]         => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[String]])
-      case t if t =:= typeOf[Option[Int]]    => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[Int]]])
-      case t if t =:= typeOf[Int]            => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Int]])
-      case t if t =:= typeOf[Option[Long]]   => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Option[Long]]])
-      case t if t =:= typeOf[Long]           => tq.map(id.reflector.invoke(_).asInstanceOf[Rep[Long]])
-      case _                                 => tq
-    }
-    ((tq.returning(tx)).into((_, idValue) => idValue.asInstanceOf[X]) += row)
-  }
+  def delete(id: I): DBIO[Int] = builder.idQuery(builder.query, Some(id)).delete
 
-  def insertAll(rows: Seq[T]): DBIO[Option[Int]] = tableQuery ++= rows
-
-  def delete(id: X): DBIO[Int] = {
-    val query = tableQuery
-      .filter(filterSource => {
-        resolveIdFilter(id, filterSource)
-      })
-      .asInstanceOf[Query[Table[T], Table[T]#TableElementType, Seq]]
-    query.delete
-  }
-
-  def update(row: T): DBIO[Int] = {
-    val query = tableQuery.filter(filterSource => {
-      val value = resolveIdValue(row)
-      resolveIdFilter(value, filterSource)
-    })
-    query.update(row)
-  }
+  def update(row: Row): DBIO[Int] = builder.idQuery(builder.query, builder.idFromRow(row)).update(row)
 
   def toRowMap[A, B](seq: Seq[(A, B)]): Map[A, Seq[B]] = {
     // create a grouped map, which is grouped by an id and contains a seq of items for each id

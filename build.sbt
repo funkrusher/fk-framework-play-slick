@@ -40,6 +40,7 @@ lazy val fk_core = (project in file("fk_core"))
 lazy val fk_library = (project in file("modules/fk_library"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
+  .aggregate(fk_core)
   .settings(
     settings,
     libraryDependencies ++= dependencies,
@@ -48,6 +49,7 @@ lazy val fk_library = (project in file("modules/fk_library"))
 lazy val fk_store = (project in file("modules/fk_store"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
+  .aggregate(fk_core)
   .settings(
     settings,
     libraryDependencies ++= dependencies,

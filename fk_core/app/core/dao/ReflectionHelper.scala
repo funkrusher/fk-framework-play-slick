@@ -4,7 +4,6 @@ import play.api.Logger
 import slick.lifted.AbstractTable
 
 import java.lang.reflect.Method
-import java.lang.reflect.Type
 
 object ReflectionHelper {
   val logger: Logger = Logger(this.getClass())

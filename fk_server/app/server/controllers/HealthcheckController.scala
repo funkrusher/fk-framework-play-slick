@@ -1,27 +1,23 @@
 package server.controllers
 
-import library.dtos.AuthorDTO
-import library.managers.AuthorManager
 import play.api.i18n.I18nSupport
-import play.api.libs.json.Json
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import util.{QueryParamFilterModel, QueryParamModel, QueryParamSorterModel}
+import play.api.mvc.AbstractController
+import play.api.mvc.ControllerComponents
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext.Implicits.global
+import javax.inject.Inject
+import javax.inject.Singleton
 import scala.concurrent.Future
 
 @Singleton
-class HealthcheckController @Inject()(cc: ControllerComponents)
-  extends AbstractController(cc)
-    with I18nSupport {
+class HealthcheckController @Inject() (cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
 
   /**
    * Healthcheck endpoint
    *
    * @return success of healthcheck
    */
-  def healtcheck() = Action.async { implicit request =>
-    Future.successful(Ok("Rockin' in the Free World!"))
-  }
+  def healtcheck() =
+    Action.async { implicit request =>
+      Future.successful(Ok("Rockin' in the Free World!"))
+    }
 }
