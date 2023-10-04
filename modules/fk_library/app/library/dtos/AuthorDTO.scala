@@ -14,7 +14,7 @@ case class AuthorDTO(
     id: Option[Int],
     @ApiModelProperty(value = "The author's first name", example = "Mike", dataType = "String", required = false)
     first_name: Option[String],
-    @ApiModelProperty(value = "The author's first name", example = "Mike", dataType = "String", required = true)
+    @ApiModelProperty(value = "The author's last name", example = "Tyson", dataType = "String", required = true)
     last_name: String,
     @ApiModelProperty(
       value = "The author's date of birth",
@@ -37,6 +37,7 @@ case class AuthorDTO(
       required = false,
     )
     distinguished: Option[Int],
+    @ApiModelProperty(value = "The author's books", required = false)
     books: Option[Seq[BookDTO]],
 ) {
   def toRow(): AuthorRow = {
