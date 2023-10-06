@@ -48,13 +48,13 @@ class AuthorController @Inject() (cc: ControllerComponents, authorManager: Autho
   @ApiResponses(
     Array(
       new ApiResponse(code = 200, message = "The Pagination was executed", response = classOf[AuthorPaginateDTO]),
-      new ApiResponse(code = 400, message = "Invalid or missing arguments"),
+      new ApiResponse(code = 500, message = "Internal Server Error"),
     )
   )
   def paginate =
     Action.async(parse.json[QueryParamModel]) { implicit request =>
       authorManager.paginate(request.body).map {
-        case Left(error)   => BadRequest(error.message)
+        case Left(error)   => InternalServerError(error.message)
         case Right(result) => Ok(Json.toJson(result))
       }
     }
@@ -82,13 +82,13 @@ class AuthorController @Inject() (cc: ControllerComponents, authorManager: Autho
   @ApiResponses(
     Array(
       new ApiResponse(code = 200, message = "The Author was created", response = classOf[AuthorDTO]),
-      new ApiResponse(code = 400, message = "Invalid or missing arguments"),
+      new ApiResponse(code = 500, message = "Internal Server Error"),
     )
   )
   def addAuthor =
     Action.async(parse.json[AuthorDTO]) { implicit request =>
       authorManager.insert(request.body).map {
-        case Left(error)   => BadRequest(error.message)
+        case Left(error)   => InternalServerError(error.message)
         case Right(author) => Ok(Json.toJson(author))
       }
     }
@@ -105,13 +105,13 @@ class AuthorController @Inject() (cc: ControllerComponents, authorManager: Autho
   @ApiResponses(
     Array(
       new ApiResponse(code = 200, message = "The Author was deleted"),
-      new ApiResponse(code = 400, message = "Invalid or missing arguments"),
+      new ApiResponse(code = 500, message = "Internal Server Error"),
     )
   )
   def deleteAuthor(authorId: Int) =
     Action.async { implicit request =>
       authorManager.delete(authorId).map {
-        case Left(error) => BadRequest(error.message)
+        case Left(error) => InternalServerError(error.message)
         case Right(_)    => Ok("deleted")
       }
     }
