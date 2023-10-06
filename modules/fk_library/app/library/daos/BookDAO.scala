@@ -1,16 +1,16 @@
-package library.daos.row
+package library.daos
 
-import core.dao.SingleKeyRowDAO
-import play.api.db.slick.DatabaseConfigProvider
+import core.dao.SingleKeyDAO
 import core.tables.Tables._
+import play.api.db.slick.DatabaseConfigProvider
 
 import javax.inject.Inject
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class BookRowDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
-    extends SingleKeyRowDAO[Book, BookRow, Int] {
+class BookDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+    extends SingleKeyDAO[Book, BookRow, Int] {
 
   import profile.api._
 

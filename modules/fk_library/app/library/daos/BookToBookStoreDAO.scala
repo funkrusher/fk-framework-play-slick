@@ -1,17 +1,16 @@
-package library.daos.row
+package library.daos
 
-import core.dao.MultiKeyRowDAO
-import play.api.db.slick.DatabaseConfigProvider
+import core.dao.MultiKeyDAO
 import core.tables.Tables._
+import play.api.db.slick.DatabaseConfigProvider
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
 class BookToBookStoreDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit
     ec: ExecutionContext
-) extends MultiKeyRowDAO[BookToBookStore, BookToBookStoreRow, (String, Int)] {
+) extends MultiKeyDAO[BookToBookStore, BookToBookStoreRow, (String, Int)] {
 
   import profile.api._
 

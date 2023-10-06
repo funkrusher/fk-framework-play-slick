@@ -2,7 +2,7 @@ package core.dao
 
 import slick.lifted.AbstractTable
 
-abstract class MultiKeyRowDAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends BaseRowDAO[V, R, I] {
+abstract class MultiKeyDAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends DAO[V, R, I] {
 
   import profile.api._
 

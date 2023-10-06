@@ -1,5 +1,8 @@
-package core.dao
+package core.repository
 
+import play.api.Logger
+import play.api.db.slick.HasDatabaseConfigProvider
+import slick.jdbc.JdbcProfile
 import slick.lifted.AbstractTable
 import slick.lifted.ColumnOrdered
 import core.util.QueryParamFilterModel
@@ -10,15 +13,20 @@ import slick.ast.Ordering
 import java.lang.reflect.Method
 import scala.reflect.runtime.universe._
 
-abstract class ViewDAO extends DAO {
+abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import profile.api._
+
+  val logger: Logger = Logger(this.getClass())
+
+  val NEVER_TRUE  = LiteralColumn(1) === LiteralColumn(0)
+  val ALWAYS_TRUE = LiteralColumn(1) === LiteralColumn(1)
 
   case class Sorter[T: TypeTag](tableQuery: TableQuery[_], columnName: String) {
 
     val table = tableQuery.baseTableRow.asInstanceOf[Table[_]]
 
-    def reflector: Method = ReflectionHelper.prepareReflector(table, columnName)
+    def reflector: Method = prepareReflector(table, columnName)
   }
 
   case class Filter[T: TypeTag](tableQuery: TableQuery[_], columnName: String, filterComparator: String) {
@@ -26,7 +34,7 @@ abstract class ViewDAO extends DAO {
 
     def filterType = typeOf[T]
 
-    def reflector: Method = ReflectionHelper.prepareReflector(table, columnName)
+    def reflector: Method = prepareReflector(table, columnName)
   }
 
   def createConditionList(
@@ -243,4 +251,23 @@ abstract class ViewDAO extends DAO {
           NEVER_TRUE.?
       }
   }
+
+  /**
+   * Prepare the reflector that can be used to resolve a value in the given table for the given columnName
+   *
+   * @param table      table
+   * @param columnName columnName
+   * @return reflector or exception
+   */
+  def prepareReflector(table: AbstractTable[_], columnName: String): Method = {
+    try {
+      table.getClass.getMethod(columnName)
+    } catch {
+      case ex: Exception =>
+        val message = s"""Column $columnName in table ${table.tableName} not found!"""
+        logger.error(message, ex)
+        throw new RuntimeException(message)
+    }
+  }
+
 }

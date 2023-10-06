@@ -1,10 +1,11 @@
 package library.managers
 
-import library.daos.row.BookToBookStoreDAO
+import core.error.ManagerError
 import library.dtos.BookToBookStoreDTO
 import core.manager.Manager
 import core.manager.errors.ManagerError
 import core.persistence.DbRunner
+import library.daos.BookToBookStoreDAO
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -24,10 +25,7 @@ class BookToBookStoreManager @Inject() (
   protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   def update(bookToBookStore: BookToBookStoreDTO): Future[Either[ManagerError, BookToBookStoreDTO]] = {
-    DbRunner.run(bookToBookStoreDAO.update(bookToBookStore.toRow())).map {
-      case Left(error)  => Left(toManagerError(error))
-      case Right(count) => Right(bookToBookStore)
-    }
+    DbRunner.run(bookToBookStoreDAO.update(bookToBookStore.toRow())).map(x => Right(bookToBookStore))
   }
 
 }
