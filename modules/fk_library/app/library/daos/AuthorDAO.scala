@@ -27,4 +27,5 @@ class AuthorDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvide
 
       override def getIdFromRow(row: Row): RowId = row.id.get
     }
+
 }

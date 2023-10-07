@@ -12,4 +12,4 @@ package core.error
  *
  * @param message
  */
-case class ObjectNotFoundError(message: String) extends ManagerError
+case class ObjectNotFoundError(message: String) extends MappingError

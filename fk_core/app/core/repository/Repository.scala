@@ -9,6 +9,7 @@ import core.util.QueryParamFilterModel
 import core.util.QueryParamModel
 import core.util.QueryParamSorterModel
 import slick.ast.Ordering
+import slick.sql.SqlAction
 
 import java.lang.reflect.Method
 import scala.reflect.runtime.universe._
@@ -145,12 +146,8 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
             maybeTable match {
               case Some(table) =>
                 createSorting(resolvedActiveSorter, table) match {
-                  case Left(ex) =>
-                    logger.error("whassssssss")
-                    null
-                  case Right(sorter) =>
-                    logger.error("whassssssss22222")
-                    sorter
+                  case Left(ex)      => null
+                  case Right(sorter) => sorter
                 }
               case _ =>
                 null
@@ -162,23 +159,20 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   implicit class PaginateQuery[A](q: Query[Rep[A], A, Seq]) {
-    def paginate(qParam: QueryParamModel): DBIO[Seq[A]] = {
+    def paginate(qParam: QueryParamModel): Query[Rep[A], A, Seq] = {
       var query = q
       query = if (qParam.drop.isDefined) query.drop(qParam.drop.get) else query
       query = if (qParam.take.isDefined) query.take(qParam.take.get) else query
+      query
+    }
+  }
 
-      val result = query.result
-
-      val statements = result.statements
-
-      val dumpInfo = result.getDumpInfo
-
-      val overridenStatements = statements.map(statement => {
+  implicit class FixForGroupingWithKeepOrdering[A](q: Query[Rep[A], A, Seq]) {
+    def resultWithFixOrderedAndGrouped(): SqlAction[Seq[A], Streaming[A], Effect.Read] = {
+      val overridenStatements = q.result.statements.map(statement => {
         statement.replace("order by", "group by `id` order by")
       })
-      val overriden = result.overrideStatements(overridenStatements)
-
-      overriden
+      q.result.overrideStatements(overridenStatements)
     }
   }
 

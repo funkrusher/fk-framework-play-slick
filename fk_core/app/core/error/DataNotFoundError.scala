@@ -1,4 +1,4 @@
-package core.error.mapping
+package core.error
 
 /**
  * DataNotFoundError

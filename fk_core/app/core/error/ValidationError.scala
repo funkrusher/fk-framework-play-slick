@@ -12,4 +12,4 @@ package core.error
  *
  * @param message
  */
-case class ValidationError(message: String) extends ManagerError
+case class ValidationError(message: String) extends MappingError

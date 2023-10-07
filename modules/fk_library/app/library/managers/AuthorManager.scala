@@ -1,6 +1,6 @@
 package library.managers
 
-import core.error.ManagerError
+import core.error.MappingError
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import core.manager.Manager
@@ -33,15 +33,15 @@ class AuthorManager @Inject() (
   import dbConfig._
   import profile.api._
 
-  def fetch(authorIds: Seq[Int]): Future[Either[ManagerError, Seq[AuthorDTO]]] = {
+  def fetch(authorIds: Seq[Int]): Future[Either[MappingError, Seq[AuthorDTO]]] = {
     DbRunner.run(authorRepository.fetch(authorIds))
   }
 
-  def paginate(qParam: QueryParamModel): Future[Either[ManagerError, AuthorPaginateDTO]] = {
+  def paginate(qParam: QueryParamModel): Future[Either[MappingError, AuthorPaginateDTO]] = {
     DbRunner.run(authorRepository.paginate(qParam))
   }
 
-  def delete(authorId: Int): Future[Either[ManagerError, Int]] = {
+  def delete(authorId: Int): Future[Either[MappingError, Int]] = {
     val action = (for {
       _            <- bookRowDAO.deleteByAuthor(authorId)
       authorDelete <- authorRowDAO.delete(authorId)
@@ -49,7 +49,7 @@ class AuthorManager @Inject() (
     DbRunner.run(action).map(Right(_))
   }
 
-  def insert(author: AuthorDTO): Future[Either[ManagerError, AuthorDTO]] = {
+  def insert(author: AuthorDTO): Future[Either[MappingError, AuthorDTO]] = {
     DbRunner
       .run(authorRowDAO.insertAndReturn(author.toRow()))
       .map(x => Right(AuthorDTO.fromRow(x)))

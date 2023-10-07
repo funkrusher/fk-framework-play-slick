@@ -11,4 +11,4 @@ package core.error
  *
  * @param message
  */
-case class DatabaseError(message: String) extends ManagerError
+case class DatabaseError(message: String) extends MappingError

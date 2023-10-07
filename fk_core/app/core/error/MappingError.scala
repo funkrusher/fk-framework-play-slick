@@ -1,6 +1,4 @@
-package core.error.mapping
-
-import core.error.ManagerError
+package core.error
 
 /**
  * MappingError
@@ -13,7 +11,7 @@ import core.error.ManagerError
  *
  * @param message
  */
-trait MappingError extends ManagerError {
+trait MappingError extends Throwable {
   def message: String
 }
 

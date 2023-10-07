@@ -1,6 +1,6 @@
 package library.managers
 
-import core.error.ManagerError
+import core.error.MappingError
 import library.dtos.BookToBookStoreDTO
 import core.manager.Manager
 import core.persistence.DbRunner
@@ -23,7 +23,7 @@ class BookToBookStoreManager @Inject() (
   // it must be defined as protected because we return DBIO as result.
   protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
-  def update(bookToBookStore: BookToBookStoreDTO): Future[Either[ManagerError, BookToBookStoreDTO]] = {
+  def update(bookToBookStore: BookToBookStoreDTO): Future[Either[MappingError, BookToBookStoreDTO]] = {
     DbRunner.run(bookToBookStoreDAO.update(bookToBookStore.toRow())).map(x => Right(bookToBookStore))
   }
 
