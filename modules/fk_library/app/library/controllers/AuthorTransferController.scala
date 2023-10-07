@@ -19,7 +19,7 @@ import javax.inject.Singleton
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-@Api("Author")
+@Api("AuthorTransfer")
 @Singleton
 class AuthorTransferController @Inject() (cc: ControllerComponents, authorTransfer: AuthorTransfer)
     extends AbstractController(cc)

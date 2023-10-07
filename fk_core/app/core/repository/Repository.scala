@@ -4,6 +4,7 @@ import play.api.Logger
 import play.api.db.slick.HasDatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import slick.lifted.AbstractTable
+import slick.lifted.CanBeQueryCondition
 import slick.lifted.ColumnOrdered
 import core.util.QueryParamFilterModel
 import core.util.QueryParamModel
@@ -12,7 +13,10 @@ import slick.ast.Ordering
 import slick.sql.SqlAction
 
 import java.lang.reflect.Method
+import scala.collection.mutable
 import scala.reflect.runtime.universe._
+
+import scala.collection.mutable.{ Map => MutableMap }
 
 abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
 
