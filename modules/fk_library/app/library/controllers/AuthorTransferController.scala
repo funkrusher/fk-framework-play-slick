@@ -1,5 +1,6 @@
 package library.controllers
 
+import com.hhandoko.play.pdf.PdfGenerator
 import core.util.QueryParamModel
 import io.swagger.annotations._
 import library.dtos.AuthorDTO
@@ -21,8 +22,11 @@ import scala.concurrent.Future
 
 @Api("AuthorTransfer")
 @Singleton
-class AuthorTransferController @Inject() (cc: ControllerComponents, authorTransfer: AuthorTransfer)
-    extends AbstractController(cc)
+class AuthorTransferController @Inject() (
+    cc: ControllerComponents,
+    authorTransfer: AuthorTransfer,
+    pdfGen: PdfGenerator,
+) extends AbstractController(cc)
     with I18nSupport {
 
   /**
@@ -81,6 +85,30 @@ class AuthorTransferController @Inject() (cc: ControllerComponents, authorTransf
           header = ResponseHeader(OK, Map(CONTENT_DISPOSITION -> s"attachment; filename=authors.csv")),
           body = HttpEntity.Streamed(authorTransfer.exportCsv(request.body), None, None),
         )
+      )
+    }
+
+  val BASE_URL = "http://localhost:9000"
+
+  /**
+   * Create Pdf-Export
+   *
+   * @return create a Pdf-Export of a selection of data.
+   */
+  @ApiOperation(
+    value = "Create Pdf-Export",
+    notes = "TODO",
+  )
+  @ApiResponses(
+    Array(
+      new ApiResponse(code = 200, message = "The Pdf-Export was executed"),
+      new ApiResponse(code = 500, message = "Internal Server Error"),
+    )
+  )
+  def exportPdf =
+    Action.async { implicit request =>
+      Future.successful(
+        pdfGen.ok(library.views.html.example(), BASE_URL)
       )
     }
 

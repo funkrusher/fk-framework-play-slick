@@ -6,5 +6,8 @@ GET   /                           server.controllers.HealthcheckController.healt
 ->    /api/store                  store.Routes
 
 # swagger-ui
-GET /swagger.json        controllers.Assets.at(path="/public", file="swagger.json")
-GET /docs/*file        controllers.Assets.at(path="/swagger-ui", file)
+GET /swagger.json                 controllers.Assets.at(path="/public", file="swagger.json")
+GET /docs/*file                   controllers.Assets.at(path="/swagger-ui", file)
+
+# static assets
+GET /assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)

@@ -8,6 +8,7 @@ PUT   /bookToBookStore/update                              library.controllers.B
 
 # authorTransfer
 POST  /author/export/csv                                   library.controllers.AuthorTransferController.exportCsv
+GET  /author/export/pdf                                    library.controllers.AuthorTransferController.exportPdf
 
 # authorExample
 GET   /author/example/testTransactionWithRollback          library.controllers.AuthorExampleController.testTransactionWithRollback

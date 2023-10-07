@@ -44,3 +44,19 @@ Multi-Module Project Routes/Play project split:
 
 Compilation-Speed:
 - https://www.playframework.com/documentation/2.8.3/CompilationSpeed
+
+
+
+# Create it
+
+```
+sbt docker:clean
+sbt docker:stage
+sbt docker:publishLocal
+```
+
+# Start it
+
+```
+docker run --rm -p 9000:9000 pdfgen-scala-play-example
+```

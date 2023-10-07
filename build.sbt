@@ -17,6 +17,7 @@ lazy val dependencies = Seq(
   "org.mariadb.jdbc"   % "mariadb-java-client"   % "3.1.2",
   "org.scalaz"        %% "scalaz-core"           % "7.3.2",
   "io.swagger"         % "swagger-annotations"   % swagger,
+  "com.hhandoko"      %% "play28-scala-pdf"      % "4.3.0",
   specs2               % Test,
 )
 
@@ -76,3 +77,27 @@ lazy val root = project
 TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value
 
 addCommandAlias("fk_server", ";project fk_server;compile;run")
+
+// Docker Stuff
+Docker / maintainer := "bernd.services@pm.me"
+Docker / packageName := "fk-framework-play-slick"
+Docker / version := sys.env.getOrElse("BUILD_NUMBER", "0")
+Docker / daemonUserUid := None
+Docker / daemonUser := "daemon"
+dockerExposedPorts := Seq(9000)
+dockerBaseImage := "openjdk:8"
+dockerRepository := sys.env.get("ecr_repo")
+dockerUpdateLatest := true
+
+// Tune Settings of Docker-Stuff
+javaOptions in Universal ++= Seq(
+  // JVM memory tuning
+  "-J-Xmx2048m",
+  "-J-Xms512m",
+  // alternative, you can remove the PID file
+  s"-Dpidfile.path=/dev/null",
+  // Use separate configuration file for production environment
+  s"-Dconfig.file=/opt/docker/conf/application.conf",
+  // Use separate logger configuration file for production environment
+  s"-Dlogger.file=/opt/docker/conf/logback.xml",
+)
