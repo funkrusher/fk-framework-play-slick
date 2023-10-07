@@ -3,7 +3,6 @@ package library.managers
 import core.error.ManagerError
 import library.dtos.BookToBookStoreDTO
 import core.manager.Manager
-import core.manager.errors.ManagerError
 import core.persistence.DbRunner
 import library.daos.BookToBookStoreDAO
 import play.api.db.slick.DatabaseConfigProvider

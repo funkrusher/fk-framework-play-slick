@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.Example
+import io.swagger.annotations.ExampleProperty
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import library.managers.AuthorManager
@@ -30,6 +32,11 @@ class AuthorController @Inject() (cc: ControllerComponents, authorManager: Autho
     extends AbstractController(cc)
     with I18nSupport {
 
+  /**
+   * Paginate Authors
+   *
+   * @return pagination result
+   */
   @ApiOperation(
     value = "Paginate Authors",
     notes = "TODO",
@@ -38,7 +45,30 @@ class AuthorController @Inject() (cc: ControllerComponents, authorManager: Autho
     Array(
       new ApiImplicitParam(
         name = "body",
-        value = "JSON Body",
+        value = """JSON Body
+                {
+                  "drop": 0,
+                  "take": 10,
+                  "sorter": {
+                    "tableName": "author",
+                    "sortOrder": "asc",
+                    "sortName": "last_name"
+                  },
+                  "filters": [
+                    {
+                      "tableName": "author",
+                      "filterName": "last_name",
+                      "filterValue": "Orwell,Coelho",
+                      "filterComparator": "in"
+                    },
+                    {
+                      "tableName": "book",
+                      "filterName": "published_in",
+                      "filterValue": "1948,1945,1988",
+                      "filterComparator": "in"
+                    }
+                  ]
+                }""",
         required = true,
         paramType = "body",
         dataTypeClass = classOf[QueryParamModel],

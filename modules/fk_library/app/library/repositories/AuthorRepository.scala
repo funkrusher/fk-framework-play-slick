@@ -68,15 +68,14 @@ class AuthorRepository @Inject() (
 
   def fetch(authorIds: Seq[Int]): DBIO[Either[MappingError, Seq[AuthorDTO]]] = {
     val action = for {
-      authors       <- authorRowDAO.selectAll(authorIds)
+      authors       <- authorRowDAO.selectAllSorted(authorIds)
       booksMap      <- bookRowDAO.fetchBooksByAuthorId(authorIds)
       bookStoresMap <- bookStoreRowDAO.fetchBookStoresByBookId(authorIds)
     } yield (authors, booksMap, bookStoresMap)
 
     action.map {
       case (authors, booksMap, bookStoresMap) =>
-        val authorsSorted = authors.sortBy(item => authorIds.indexOf(item.id))
-        Right(authorsSorted.map { author =>
+        Right(authors.map { author =>
           // gather all related data for this author, with help of the grouped maps.
           val books = booksMap.getOrElse(author.id.get, Seq.empty)
           val bookApis = books.map(book => {

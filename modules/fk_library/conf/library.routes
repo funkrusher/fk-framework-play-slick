@@ -1,6 +1,6 @@
 # /api/library
 
-GET   /author/paginate            library.controllers.AuthorController.paginate
+POST  /author/paginate            library.controllers.AuthorController.paginate
 POST  /author/add                 library.controllers.AuthorController.addAuthor
 POST  /author/delete/:id          library.controllers.AuthorController.deleteAuthor(id: Int)
 PUT   /bookToBookStore/update     library.controllers.BookToBookStoreController.update

@@ -4,11 +4,12 @@ import core.dao.SingleKeyDAO
 import core.tables.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AuthorDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+class AuthorDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
     extends SingleKeyDAO[Author, AuthorRow, Int] {
 
   import profile.api._
