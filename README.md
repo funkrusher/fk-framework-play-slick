@@ -1,5 +1,12 @@
 # Fk-Framework: Best-Practices for a Play-Framework Multi-Module-Project with Slick
 
+TODO:
+
+- Warning: This documentation is just a stub and collection of different documentations on the relevant topics, 
+and needs to be completely overhauled from scratch, as soon as all the basics are implemented.
+ 
+---
+
 This is a minimal CRUD service exposing a couple of endpoints over REST.
 
 Under the hood, the code is using:
@@ -60,3 +67,60 @@ sbt docker:publishLocal
 ```
 docker run --rm -p 9000:9000 pdfgen-scala-play-example
 ```
+
+------------------------
+
+# Play Multi-Project
+
+https://www.scala-sbt.org/1.x/docs/Multi-Project.html
+see: https://pbassiner.github.io/blog/defining_multi-project_builds_with_sbt.html
+
+An example of building applications that consist of multiple services.
+
+First off, the top-level project is an sbt multi-project. It defines two Play applications, `app1` and `app2`. It also
+defines a non-Play project `model` that contains code shared by the Play applications.
+
+Each Play app is then split into a master app, and Play sub-modules (in this case only an admin module). Play sub-modules
+follow Play conventions, but require to use a separate routes file and sub-package for controllers and views. They
+cannot have conf files.
+
+Note how sbt plugins are only defined by the root build.
+
+## Running
+
+1. Play2-Compiler in Settings wählen und den Root des Projects angeben.
+
+You can run each app individually by using `sbt ";project app<n>;run`. Two scripts are provided for this.
+
+Intellij
+
+SBT-Task with following task:
+```
+"project app1" run
+"project app2" run
+```
+
+- `Allow Parallel Run` den Haken setzen
+- `Use SBT Shell` den Haken wegnehmen
+
+- Nun eine `Compound` Run-Configuration erstellen mit der beide Services gestartet werden können
+- Jeweils einen unterschiedlichen Port angeben.
+- Den "Services"-Tab nutzen um die Services alle schön komfortabel zu starten oder zu debuggen parallel.
+- Alternativ: Shell-Scripts nutzen um zu starten.
+
+
+## Deploy
+
+es reicht aus im Root-Verzeichnis des Projekts folgendes Kommando auszuführen
+um für alle Subprojekte die das können entsprechende Dockerimage und co. zu erstellen so dass das Projekt bereit ist
+deployed zu werden (dies kann über gitlab-pipelines gemacht werden):
+
+```
+sbt docker:stage
+```
+
+## Testing
+
+`sbt test` will run all tests in all sub-projects.
+
+
