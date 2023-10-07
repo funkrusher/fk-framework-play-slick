@@ -1,0 +1,3 @@
+
+Authentication, Authentifizierung, RBAC. JWT-Token,...
+wie kann dies im Play-Framework verankert werden. Beispiel und Code-Integration.
