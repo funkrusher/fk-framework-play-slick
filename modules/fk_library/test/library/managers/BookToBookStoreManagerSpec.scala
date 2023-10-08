@@ -7,6 +7,7 @@ import library.dtos.BookToBookStoreDTO
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.Inside.inside
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatest.matchers.should.Matchers.convertToStringShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
@@ -14,8 +15,10 @@ import org.scalatestplus.play.PlaySpec
 import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio.DBIO
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
 
 class BookToBookStoreManagerSpec extends PlaySpec with MockitoSugar {
 
@@ -39,14 +42,14 @@ class BookToBookStoreManagerSpec extends PlaySpec with MockitoSugar {
           stock = Some(1),
         )
       )
-      futureEither.map(either => {
-        inside(either) {
-          case Right(obj) =>
-            obj.name shouldBe "Test"
-            obj.book_id shouldBe 1
-            obj.stock shouldBe Some(1)
-        }
-      })
+
+      val either = Await.result(futureEither, 2000.milliseconds)
+      inside(either) {
+        case Right(obj) =>
+          obj.name shouldBe "Test"
+          obj.book_id shouldBe 1
+          obj.stock shouldBe Some(1)
+      }
     }
   }
 }
