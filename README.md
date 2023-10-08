@@ -7,6 +7,17 @@ and needs to be completely overhauled from scratch, as soon as all the basics ar
  
 ---
 
+important:
+- always disable! the play2-compiler in intellij if you use intellij. 
+  - a) play2-compiler in intellij slows down your build
+  - b) play2-compiler in intellij is not needed
+  - c) play2-compiler in intellij does not show problems nicely in build-window.
+  - d) play2-compiler does not compile tests (can not resolve classpath correctly)
+  - e) always delete all target/ folders when you disable the play2-compiler in the settings.
+
+---
+
+
 This is a minimal CRUD service exposing a couple of endpoints over REST.
 
 Under the hood, the code is using:
