@@ -5,9 +5,12 @@ GET   /                           server.controllers.HealthcheckController.healt
 ->    /api/library                library.Routes
 ->    /api/store                  store.Routes
 
+# static assets
+GET /assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)
+
 # swagger-ui
+# those routes can stay in production, as they will just find nothing,
+# as we don't deploy swagger.json and swagger-ui module in prod.
 GET /swagger.json                 controllers.Assets.at(path="/public", file="swagger.json")
 GET /docs/*file                   controllers.Assets.at(path="/swagger-ui", file)
 
-# static assets
-GET /assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)

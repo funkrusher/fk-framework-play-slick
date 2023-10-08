@@ -1,0 +1,18 @@
+stages:
+  - triggers
+
+am-backend-service:
+  stage: triggers
+  trigger:
+    include: .gitlab-ci-am_backend_service.yml
+    strategy: depend
+  rules:
+    - changes: [am_backend_service/**/*, am_shared/**/*]
+
+am-pms-service:
+  stage: triggers
+  trigger:
+    include: .gitlab-ci-am_pms_service.yml
+    strategy: depend
+  rules:
+    - changes: [am_pms_service/**/*, am_shared/**/*]

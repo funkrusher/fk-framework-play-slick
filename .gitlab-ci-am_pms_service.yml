@@ -1,0 +1,9 @@
+stages:
+  - compile
+
+project:
+  stage: compile
+  script:
+    - echo "am_pms_service pipe"
+  tags:
+    - docker

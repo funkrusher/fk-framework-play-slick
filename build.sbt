@@ -59,7 +59,20 @@ lazy val fk_store = (project in file("modules/fk_store"))
     libraryDependencies ++= dependencies,
   )
 
-lazy val fk_server = (project in file("fk_server"))
+lazy val fk_swagger_ui = (project in file("modules/fk_swagger_ui"))
+  .enablePlugins(PlayScala)
+  .settings(
+    settings
+  )
+def addSwaggerUiIfEnabled(prj: Project): Project = {
+  val includeSwaggerPlugin: Boolean = sys.props.getOrElse("includeSwaggerPlugin", "false") == "true"
+  if (includeSwaggerPlugin) {
+    prj.dependsOn(fk_swagger_ui)
+  } else {
+    prj
+  }
+}
+lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core, fk_library, fk_store)
   .settings(
