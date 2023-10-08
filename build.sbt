@@ -17,6 +17,7 @@ val playScalaPdfVersion       = "4.3.0"
 val slickVersion              = "3.4.1"
 val testContainersVersion     = "0.39.3"
 val scalaTestPlusPlay         = "5.1.0"
+val scalaTest                 = "3.2.17.0"
 
 // dependencies used in most projects
 lazy val dependencies = Seq(
@@ -28,6 +29,7 @@ lazy val dependencies = Seq(
   "io.swagger"              % "swagger-annotations"   % swaggerAnnotationsVersion,
   "com.hhandoko"           %% "play28-scala-pdf"      % playScalaPdfVersion,
   "org.scalatestplus.play" %% "scalatestplus-play"    % scalaTestPlusPlay % "test",
+  "org.scalatestplus"      %% "mockito-4-11"          % scalaTest         % "test",
 )
 
 // fk_codegen

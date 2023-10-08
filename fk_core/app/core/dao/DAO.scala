@@ -1,10 +1,11 @@
 package core.dao
 
+import com.google.inject.ImplementedBy
 import play.api.db.slick.HasDatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import slick.lifted.AbstractTable
 
-abstract class DAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends HasDatabaseConfigProvider[JdbcProfile] {
+trait DAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import profile.api._
 
@@ -17,6 +18,21 @@ abstract class DAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] ext
   type FilteredRowQuery = Query[V, Table[Row]#TableElementType, Seq]
 
   type RowIdQuery = Query[Rep[RowId], RowId, Seq]
+
+  def select(id: I): DBIO[Option[Row]]
+
+  def insert(row: Row): DBIO[Int]
+
+  def insertAll(rows: Seq[Row]): DBIO[Option[Int]]
+
+  def delete(id: I): DBIO[Int]
+
+  def update(row: Row): DBIO[Int]
+}
+
+abstract class DAOImpl[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends DAO[V, R, I] {
+
+  import profile.api._
 
   // ---------------------------------------
   // Abstract Functions (to be implemented!)

@@ -4,7 +4,7 @@ import slick.lifted.AbstractTable
 
 import scala.concurrent.ExecutionContext
 
-abstract class SingleKeyDAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends DAO[V, R, I] {
+abstract class SingleKeyDAO[V <: AbstractTable[R], R <: V#TableElementType, I <: Any] extends DAOImpl[V, R, I] {
 
   import profile.api._
 

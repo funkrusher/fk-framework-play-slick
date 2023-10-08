@@ -41,7 +41,7 @@ case class QueryParamFilterModel(
     tableName: String,
     @ApiModelProperty(value = "Column-Name filtered on", example = "MyColumn", dataType = "String", required = true)
     filterName: String,
-    @ApiModelProperty(value = "Filter-Value", example = "Diaphragma", dataType = "String", required = true)
+    @ApiModelProperty(value = "Value to be filtered", example = "Diaphragma", dataType = "String", required = true)
     filterValue: String,
     @ApiModelProperty(
       value = "Filter-Comparator (like,equal,...)",
