@@ -16,17 +16,18 @@ val swaggerAnnotationsVersion = "1.6.1"
 val playScalaPdfVersion       = "4.3.0"
 val slickVersion              = "3.4.1"
 val testContainersVersion     = "0.39.3"
+val scalaTestPlusPlay         = "5.1.0"
 
 // dependencies used in most projects
 lazy val dependencies = Seq(
   guice,
-  "com.typesafe.play" %% "play-slick"            % playSlickVersion,
-  "com.typesafe.play" %% "play-slick-evolutions" % playSlickVersion,
-  "org.mariadb.jdbc"   % "mariadb-java-client"   % mariadbJavaClientVersion,
-  "org.scalaz"        %% "scalaz-core"           % scalazVersion,
-  "io.swagger"         % "swagger-annotations"   % swaggerAnnotationsVersion,
-  "com.hhandoko"      %% "play28-scala-pdf"      % playScalaPdfVersion,
-  specs2               % Test,
+  "com.typesafe.play"      %% "play-slick"            % playSlickVersion,
+  "com.typesafe.play"      %% "play-slick-evolutions" % playSlickVersion,
+  "org.mariadb.jdbc"        % "mariadb-java-client"   % mariadbJavaClientVersion,
+  "org.scalaz"             %% "scalaz-core"           % scalazVersion,
+  "io.swagger"              % "swagger-annotations"   % swaggerAnnotationsVersion,
+  "com.hhandoko"           %% "play28-scala-pdf"      % playScalaPdfVersion,
+  "org.scalatestplus.play" %% "scalatestplus-play"    % scalaTestPlusPlay % "test",
 )
 
 // fk_codegen
@@ -109,7 +110,7 @@ lazy val root = project
   .in(file("."))
   .dependsOn(fk_server, fk_scheduler, fk_codegen)
   .aggregate(fk_server, fk_scheduler)
-  .settings(settings)
+  .settings(settings, libraryDependencies ++= dependencies)
 
 // tasks and commands
 TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value

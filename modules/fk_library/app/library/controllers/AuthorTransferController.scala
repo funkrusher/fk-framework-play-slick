@@ -108,7 +108,8 @@ class AuthorTransferController @Inject() (
   def exportPdf =
     Action.async { implicit request =>
       Future.successful(
-        pdfGen.ok(library.views.html.example(), BASE_URL)
+        Ok("ok")
+        // pdfGen.ok(library.views.html.example(), BASE_URL)
       )
     }
 
