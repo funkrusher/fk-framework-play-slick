@@ -1,18 +1,18 @@
 stages:
   - triggers
 
-am-backend-service:
+fk-server:
   stage: triggers
   trigger:
-    include: .gitlab-ci-am_backend_service.yml
+    include: .gitlab-ci-fk_server.yml
     strategy: depend
   rules:
-    - changes: [am_backend_service/**/*, am_shared/**/*]
+    - changes: [fk_server/**/*, fk_core/**/*, modules/fk_library/**/*, modules/fk_store/**/*, modules/fk_swagger_ui/**/*]
 
-am-pms-service:
+fk-scheduler:
   stage: triggers
   trigger:
-    include: .gitlab-ci-am_pms_service.yml
+    include: .gitlab-ci-fk_scheduler.yml
     strategy: depend
   rules:
-    - changes: [am_pms_service/**/*, am_shared/**/*]
+    - changes: [fk_scheduler/**/*, fk_core/**/*]

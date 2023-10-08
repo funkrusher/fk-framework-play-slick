@@ -5,35 +5,43 @@ name := "fk-framework-play-slick"
 lazy val settings = Seq(
   organization := "org.fk",
   version := "1.0-SNAPSHOT",
-  scalaVersion := "2.13.8",
+  scalaVersion := "2.13.12",
 )
 
-val swagger = "1.6.1"
+// versions
+val playSlickVersion          = "5.1.0"
+val mariadbJavaClientVersion  = "3.1.2"
+val scalazVersion             = "7.3.2"
+val swaggerAnnotationsVersion = "1.6.1"
+val playScalaPdfVersion       = "4.3.0"
+val slickVersion              = "3.4.1"
+val testContainersVersion     = "0.39.3"
 
+// dependencies used in most projects
 lazy val dependencies = Seq(
   guice,
-  "com.typesafe.play" %% "play-slick"            % "5.1.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "5.1.0",
-  "org.mariadb.jdbc"   % "mariadb-java-client"   % "3.1.2",
-  "org.scalaz"        %% "scalaz-core"           % "7.3.2",
-  "io.swagger"         % "swagger-annotations"   % swagger,
-  "com.hhandoko"      %% "play28-scala-pdf"      % "4.3.0",
+  "com.typesafe.play" %% "play-slick"            % playSlickVersion,
+  "com.typesafe.play" %% "play-slick-evolutions" % playSlickVersion,
+  "org.mariadb.jdbc"   % "mariadb-java-client"   % mariadbJavaClientVersion,
+  "org.scalaz"        %% "scalaz-core"           % scalazVersion,
+  "io.swagger"         % "swagger-annotations"   % swaggerAnnotationsVersion,
+  "com.hhandoko"      %% "play28-scala-pdf"      % playScalaPdfVersion,
   specs2               % Test,
 )
 
-// define projects
-
+// fk_codegen
 lazy val fk_codegen = (project in file("fk_codegen"))
   .settings(
     settings,
     libraryDependencies ++= dependencies ++ Seq(
       jdbc,
-      "com.typesafe.slick" %% "slick-codegen"                  % "3.4.1",
-      "com.dimafeng"       %% "testcontainers-scala-scalatest" % "0.39.3",
-      "com.dimafeng"       %% "testcontainers-scala-mariadb"   % "0.39.3",
+      "com.typesafe.slick" %% "slick-codegen"                  % slickVersion,
+      "com.dimafeng"       %% "testcontainers-scala-scalatest" % testContainersVersion,
+      "com.dimafeng"       %% "testcontainers-scala-mariadb"   % testContainersVersion,
     ),
   )
 
+// fk_core
 lazy val fk_core = (project in file("fk_core"))
   .enablePlugins(PlayScala)
   .settings(
@@ -41,6 +49,7 @@ lazy val fk_core = (project in file("fk_core"))
     libraryDependencies ++= dependencies,
   )
 
+// modules/fk_library
 lazy val fk_library = (project in file("modules/fk_library"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
@@ -50,6 +59,7 @@ lazy val fk_library = (project in file("modules/fk_library"))
     libraryDependencies ++= dependencies,
   )
 
+// modules/fk_store
 lazy val fk_store = (project in file("modules/fk_store"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
@@ -59,6 +69,7 @@ lazy val fk_store = (project in file("modules/fk_store"))
     libraryDependencies ++= dependencies,
   )
 
+// modules/fk_swagger_ui
 lazy val fk_swagger_ui = (project in file("modules/fk_swagger_ui"))
   .enablePlugins(PlayScala)
   .settings(
@@ -72,6 +83,8 @@ def addSwaggerUiIfEnabled(prj: Project): Project = {
     prj
   }
 }
+
+// fk_server
 lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core, fk_library, fk_store)
@@ -81,17 +94,29 @@ lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
     PlayKeys.playDefaultPort := 9000,
   )
 
+// fk_scheduler
+lazy val fk_scheduler = addSwaggerUiIfEnabled(project in file("fk_scheduler"))
+  .enablePlugins(PlayScala)
+  .dependsOn(fk_core)
+  .settings(
+    settings,
+    libraryDependencies ++= dependencies,
+    PlayKeys.playDefaultPort := 9001,
+  )
+
+// root
 lazy val root = project
   .in(file("."))
-  .dependsOn(fk_server, fk_codegen)
-  .aggregate(fk_server)
+  .dependsOn(fk_server, fk_scheduler, fk_codegen)
+  .aggregate(fk_server, fk_scheduler)
   .settings(settings)
 
+// tasks and commands
 TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value
-
 addCommandAlias("fk_server", ";project fk_server;compile;run")
+addCommandAlias("fk_scheduler", ";project fk_scheduler;compile;run")
 
-// Docker Stuff
+// Docker Stuff (TODO: is only sketched here, needs to be tuned)
 Docker / maintainer := "bernd.services@pm.me"
 Docker / packageName := "fk-framework-play-slick"
 Docker / version := sys.env.getOrElse("BUILD_NUMBER", "0")

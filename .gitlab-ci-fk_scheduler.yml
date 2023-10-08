@@ -4,6 +4,6 @@ stages:
 project:
   stage: compile
   script:
-    - echo "am_backend_service pipe"
+    - echo "fk_scheduler pipe"
   tags:
     - docker

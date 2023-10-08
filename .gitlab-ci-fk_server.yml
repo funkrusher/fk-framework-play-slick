@@ -4,6 +4,6 @@ stages:
 project:
   stage: compile
   script:
-    - echo "am_pms_service pipe"
+    - echo "fk_server pipe"
   tags:
     - docker
