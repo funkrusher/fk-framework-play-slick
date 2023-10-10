@@ -10,13 +10,13 @@ trait BookToBookStoreTable {
   import slick.jdbc.{GetResult => GR}
   /** Entity class storing rows of table BookToBookStore
    *  @param name Database column name SqlType(VARCHAR), Length(400,true)
-   *  @param book_id Database column book_id SqlType(INT)
+   *  @param book_id Database column book_id SqlType(BIGINT)
    *  @param stock Database column stock SqlType(INT), Default(None) */
-  case class BookToBookStoreRow(name: String, book_id: Int, stock: Option[Int])
+  case class BookToBookStoreRow(name: String, book_id: Long, stock: Option[Int])
   /** GetResult implicit for fetching BookToBookStoreRow objects using plain SQL queries */
-  implicit def GetResultBookToBookStoreRow(implicit e0: GR[String], e1: GR[Int], e2: GR[Option[Int]]): GR[BookToBookStoreRow] = GR{
+  implicit def GetResultBookToBookStoreRow(implicit e0: GR[String], e1: GR[Long], e2: GR[Option[Int]]): GR[BookToBookStoreRow] = GR{
     prs => import prs._
-    val r = (<<[String], <<[Int], <<?[Int])
+    val r = (<<[String], <<[Long], <<?[Int])
     import r._
     BookToBookStoreRow.tupled((_1, _2, _3)) // putting AutoInc last
   }
@@ -28,8 +28,8 @@ trait BookToBookStoreTable {
 
     /** Database column name SqlType(VARCHAR), Length(400,true) */
     val name: Rep[String] = column[String]("name", O.Length(400,varying=true))
-    /** Database column book_id SqlType(INT) */
-    val book_id: Rep[Int] = column[Int]("book_id")
+    /** Database column book_id SqlType(BIGINT) */
+    val book_id: Rep[Long] = column[Long]("book_id")
     /** Database column stock SqlType(INT), Default(None) */
     val stock: Rep[Option[Int]] = column[Option[Int]]("stock")
 

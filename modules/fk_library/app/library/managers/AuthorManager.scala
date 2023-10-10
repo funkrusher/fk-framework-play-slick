@@ -33,7 +33,7 @@ class AuthorManager @Inject() (
   import dbConfig._
   import profile.api._
 
-  def fetch(authorIds: Seq[Int]): Future[Either[MappingError, Seq[AuthorDTO]]] = {
+  def fetch(authorIds: Seq[Long]): Future[Either[MappingError, Seq[AuthorDTO]]] = {
     DbRunner.run(authorRepository.fetch(authorIds))
   }
 
@@ -41,7 +41,7 @@ class AuthorManager @Inject() (
     DbRunner.run(authorRepository.paginate(qParam))
   }
 
-  def delete(authorId: Int): Future[Either[MappingError, Int]] = {
+  def delete(authorId: Long): Future[Either[MappingError, Int]] = {
     val action = (for {
       _            <- bookRowDAO.deleteByAuthor(authorId)
       authorDelete <- authorRowDAO.delete(authorId)

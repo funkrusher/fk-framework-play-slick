@@ -135,3 +135,14 @@ sbt docker:stage
 `sbt test` will run all tests in all sub-projects.
 
 
+
+
+-------------
+
+
+Deploy Build
+
+sbt fk_scheduler/universal:packageBin
+sbt fk_server/universal:packageBin
+
+Ausgabe erfolgt im "target/universal" ordner des jeweiligen projects

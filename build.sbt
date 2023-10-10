@@ -1,7 +1,8 @@
 import com.typesafe.config.ConfigFactory
 
-name := "fk-framework-play-slick"
+import scala.collection.Seq
 
+name := "fk-framework-play-slick"
 lazy val settings = Seq(
   organization := "org.fk",
   version := "1.0-SNAPSHOT",
@@ -89,22 +90,74 @@ def addSwaggerUiIfEnabled(prj: Project): Project = {
 
 // fk_server
 lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
-  .enablePlugins(PlayScala)
+  .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging)
   .dependsOn(fk_core, fk_library, fk_store)
   .settings(
     settings,
+    Universal / javaOptions ++= Seq(
+      "-Dconfig.file=application.conf",
+      "-Dlogger.resource=logback.xml",
+      "-J-Xms1536M",
+      "-J-Xmx1536M",
+      "-J-Xss1M",
+      "-J-XX:+CMSClassUnloadingEnabled",
+    ),
     libraryDependencies ++= dependencies,
     PlayKeys.playDefaultPort := 9000,
+    // deploy-configuration (dist)
+    logLevel := Level.Error,
+    Universal / javaOptions ++= Seq(
+      "-Dconfig.file=application.conf",
+      "-Dlogger.resource=logback.xml",
+      "-J-Xms1536M",
+      "-J-Xmx1536M",
+      "-J-Xss1M",
+      "-J-XX:+CMSClassUnloadingEnabled",
+    ),
+    Universal / packageName := "dist",
+    Universal / executableScriptName := "dist",
+    Universal / topLevelDirectory := Some("dist"),
+    Universal / mappings ++= com.typesafe.sbt.packager.MappingsHelper.directory("logs"),
+    Compile / resourceDirectory := (Compile / resourceDirectory).value,
+    Compile / packageSrc / publishArtifact := false,
+    Compile / packageDoc / mappings := Seq(),
+    Compile / packageDoc / publishArtifact := false,
+    Universal / javaOptions ++= Seq(
+      "-Dpidfile.path=/dev/null",
+      "-agentlib:jdwp-transport=dt_socket,server=y,address=9010,suspend=n",
+    ),
   )
 
 // fk_scheduler
 lazy val fk_scheduler = addSwaggerUiIfEnabled(project in file("fk_scheduler"))
-  .enablePlugins(PlayScala)
+  .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging)
   .dependsOn(fk_core)
   .settings(
     settings,
     libraryDependencies ++= dependencies,
     PlayKeys.playDefaultPort := 9001,
+    // deploy-configuration (dist)
+    logLevel := Level.Error,
+    Universal / javaOptions ++= Seq(
+      "-Dconfig.file=application.conf",
+      "-Dlogger.resource=logback.xml",
+      "-J-Xms1536M",
+      "-J-Xmx1536M",
+      "-J-Xss1M",
+      "-J-XX:+CMSClassUnloadingEnabled",
+    ),
+    Universal / packageName := "dist",
+    Universal / executableScriptName := "dist",
+    Universal / topLevelDirectory := Some("dist"),
+    Universal / mappings ++= com.typesafe.sbt.packager.MappingsHelper.directory("logs"),
+    Compile / resourceDirectory := (Compile / resourceDirectory).value,
+    Compile / packageSrc / publishArtifact := false,
+    Compile / packageDoc / mappings := Seq(),
+    Compile / packageDoc / publishArtifact := false,
+    Universal / javaOptions ++= Seq(
+      "-Dpidfile.path=/dev/null",
+      "-agentlib:jdwp-transport=dt_socket,server=y,address=9010,suspend=n",
+    ),
   )
 
 // root
@@ -118,27 +171,3 @@ lazy val root = project
 TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value
 addCommandAlias("fk_server", ";project fk_server;compile;run")
 addCommandAlias("fk_scheduler", ";project fk_scheduler;compile;run")
-
-// Docker Stuff (TODO: is only sketched here, needs to be tuned)
-Docker / maintainer := "bernd.services@pm.me"
-Docker / packageName := "fk-framework-play-slick"
-Docker / version := sys.env.getOrElse("BUILD_NUMBER", "0")
-Docker / daemonUserUid := None
-Docker / daemonUser := "daemon"
-dockerExposedPorts := Seq(9000)
-dockerBaseImage := "openjdk:8"
-dockerRepository := sys.env.get("ecr_repo")
-dockerUpdateLatest := true
-
-// Tune Settings of Docker-Stuff
-javaOptions in Universal ++= Seq(
-  // JVM memory tuning
-  "-J-Xmx2048m",
-  "-J-Xms512m",
-  // alternative, you can remove the PID file
-  s"-Dpidfile.path=/dev/null",
-  // Use separate configuration file for production environment
-  s"-Dconfig.file=/opt/docker/conf/application.conf",
-  // Use separate logger configuration file for production environment
-  s"-Dlogger.file=/opt/docker/conf/logback.xml",
-)

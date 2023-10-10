@@ -41,38 +41,38 @@ INSERT INTO language (id, cd, description) VALUES (2, 'de', 'Deutsch');
 INSERT INTO language (id, cd, description) VALUES (3, 'fr', 'Français');
 INSERT INTO language (id, cd, description) VALUES (4, 'pt', 'Português');
 
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10001 , 'George'  , 'Orwell' , DATE '1903-06-26', 1903         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10002 , 'Paulo'   , 'Coelho' , DATE '1947-08-24', 1947         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10003 , 'Robert'  , 'Musil' , DATE '1903-06-26', 1903         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10004 , 'Claudia Simone'   , 'Dorchain' , DATE '1947-08-24', 1947);
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10005 , 'Georgia'  , 'Agamben' , DATE '1903-06-26', 1903);
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10006 , 'Leo'   , 'Tolstoi' , DATE '1947-08-24', 1947);
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10007 , 'Fjodor'  , 'Dostojewski' , DATE '1903-06-26', 1903);
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10008 , 'Franz'   , 'Kafka' , DATE '1947-08-24', 1947         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10009 , 'Hermann'  , 'Hesse' , DATE '1903-06-26', 1903         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10010 , 'Thomas'   , 'Mann' , DATE '1947-08-24', 1947         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10011 , 'Sybille'  , 'Berg' , DATE '1903-06-26', 1903         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10012 , 'Julia'   , 'Zeh' , DATE '1947-08-24', 1947         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10013 , 'Frank'  , 'Herbert' , DATE '1903-06-26', 1903);
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10014 , 'Michael'   , 'Hedges' , DATE '1947-08-24', 1947);
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10015 , 'Anna'  , 'Sutter' , DATE '1903-06-26', 1903         );
-INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth)
-VALUES           (10016 , 'Rainer'   , 'Mai' , DATE '1947-08-24', 1947         );
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10001 , 'George'  , 'Orwell' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10002 , 'Paulo'   , 'Coelho' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10003 , 'Robert'  , 'Musil' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10004 , 'Claudia Simone'   , 'Dorchain' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10005 , 'Georgia'  , 'Agamben' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10006 , 'Leo'   , 'Tolstoi' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10007 , 'Fjodor'  , 'Dostojewski' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10008 , 'Franz'   , 'Kafka' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10009 , 'Hermann'  , 'Hesse' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10010 , 'Thomas'   , 'Mann' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10011 , 'Sybille'  , 'Berg' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10012 , 'Julia'   , 'Zeh' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10013 , 'Frank'  , 'Herbert' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10014 , 'Michael'   , 'Hedges' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10015 , 'Anna'  , 'Sutter' , '1903-06-26', 1903, TIMESTAMP('2023-01-01'));
+INSERT INTO author (id, first_name, last_name, date_of_birth    , year_of_birth, created_at)
+VALUES           (10016 , 'Rainer'   , 'Mai' , '1947-08-24', 1947, TIMESTAMP('2023-01-01'));
 
 INSERT INTO book (id, author_id, title         , published_in, language_id)
 VALUES         (10001 , 10001    , '1984'        , 1948        , 1          );
@@ -107,8 +107,8 @@ INSERT INTO book_to_book_store VALUES ('Ex Libris'                , 10003, 10002
 INSERT INTO book_to_book_store VALUES ('Buchhandlung im Volkshaus', 10003, 10001 );
 
 -- Copy the data from the temporary table to your target table
-INSERT INTO author (id, first_name, last_name, date_of_birth, year_of_birth)
-SELECT id,  RAND() , RAND(), '1903-05-26', 1903 FROM author_temp_data;
+INSERT INTO author (id, first_name, last_name, date_of_birth, year_of_birth, created_at)
+SELECT id,  RAND() , RAND(), '1903-05-26', 1903, TIMESTAMP('2023-01-01') FROM author_temp_data;
 
 INSERT INTO book (id, author_id, title, published_in, language_id)
 SELECT book_id, author_id, RAND(), 1903, 2 FROM book_temp_data;
@@ -131,3 +131,4 @@ DELETE FROM book_store;
 DELETE FROM book;
 DELETE FROM book_to_book_store;
 DELETE FROM author;
+DELETE FROM language;

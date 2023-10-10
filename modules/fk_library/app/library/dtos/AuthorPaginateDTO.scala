@@ -1,5 +1,6 @@
 package library.dtos
 
+import core.dto.DTOImplicits
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import play.api.libs.json.Json
@@ -13,6 +14,6 @@ case class AuthorPaginateDTO(
     count: Int,
 )
 
-object AuthorPaginateDTO {
+object AuthorPaginateDTO extends DTOImplicits {
   implicit val fmt: OFormat[AuthorPaginateDTO] = Json.format[AuthorPaginateDTO]
 }

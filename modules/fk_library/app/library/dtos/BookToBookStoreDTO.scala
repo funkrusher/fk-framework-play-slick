@@ -1,5 +1,6 @@
 package library.dtos
 
+import core.dto.DTOImplicits
 import play.api.libs.json.Json
 import play.api.libs.json.OFormat
 import core.tables.Tables._
@@ -10,8 +11,8 @@ import io.swagger.annotations.ApiModelProperty
 case class BookToBookStoreDTO(
     @ApiModelProperty(value = "The bookstore's name", example = "The Bookship", dataType = "String", required = true)
     name: String,
-    @ApiModelProperty(value = "The book's id", example = "17", dataType = "Int", required = true)
-    book_id: Int,
+    @ApiModelProperty(value = "The book's id", example = "17", dataType = "Long", required = true)
+    book_id: Long,
     @ApiModelProperty(
       value = "The stock count of this book in this bookstore",
       example = "250",
@@ -29,6 +30,6 @@ case class BookToBookStoreDTO(
   }
 }
 
-object BookToBookStoreDTO {
+object BookToBookStoreDTO extends DTOImplicits {
   implicit val fmt: OFormat[BookToBookStoreDTO] = Json.format[BookToBookStoreDTO]
 }

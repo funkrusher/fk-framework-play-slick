@@ -44,7 +44,7 @@ class AuthorRepository @Inject() (
 
   import profile.api._
 
-  def fetch(authorIds: Seq[Int]): DBIO[Either[MappingError, Seq[AuthorDTO]]] = {
+  def fetch(authorIds: Seq[Long]): DBIO[Either[MappingError, Seq[AuthorDTO]]] = {
     val action = for {
       authors       <- authorRowDAO.selectAllSorted(authorIds)
       booksMap      <- bookRowDAO.fetchBooksByAuthorId(authorIds)
@@ -74,7 +74,7 @@ class AuthorRepository @Inject() (
     )
   }
 
-  def getQueryParamQuery(qParam: QueryParamModel): Query[Rep[Int], Int, Seq] = {
+  def getQueryParamQuery(qParam: QueryParamModel): Query[Rep[Long], Long, Seq] = {
     val authorFilters = Seq(
       Filter[Option[String]](Author, "first_name", "like"),
       Filter[Option[String]](Author, "first_name", "in"),
@@ -115,7 +115,7 @@ class AuthorRepository @Inject() (
     }
   }
 
-  def getIdPublisher(qParam: QueryParamModel): DatabasePublisher[Int] = {
+  def getIdPublisher(qParam: QueryParamModel): DatabasePublisher[Long] = {
     // we want to fetch the data from the database in chunks of items per network-response from db to us.
     db.stream(
       getQueryParamQuery(qParam).resultWithFixOrderedAndGrouped

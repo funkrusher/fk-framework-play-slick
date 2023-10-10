@@ -4,11 +4,12 @@ import core.dao.SingleKeyDAO
 import core.tables.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class BookStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+class BookStoreDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
     extends SingleKeyDAO[BookStore, BookStoreRow, String] {
 
   import profile.api._
@@ -27,7 +28,7 @@ class BookStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
       override def getIdFromRow(row: Row): RowId = row.name
     }
 
-  def fetchBookStoresByBookId(authorIds: Seq[Int]): DBIO[Map[Int, Seq[BookStoreRow]]] = {
+  def fetchBookStoresByBookId(authorIds: Seq[Long]): DBIO[Map[Long, Seq[BookStoreRow]]] = {
     val action = for {
       bookId    <- Book.filter(_.author_id.inSet(authorIds)).map(_.id)
       relation  <- BookToBookStore.filter(_.book_id === bookId)

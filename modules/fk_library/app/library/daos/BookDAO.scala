@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class BookDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
-    extends SingleKeyDAO[Book, BookRow, Int] {
+    extends SingleKeyDAO[Book, BookRow, Long] {
 
   import profile.api._
 
@@ -28,14 +28,14 @@ class BookDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
       override def getIdFromRow(row: Row): RowId = row.id.get
     }
 
-  def fetchBooksByAuthorId(authorIds: Seq[Int]): DBIO[Map[Int, Seq[BookRow]]] = {
+  def fetchBooksByAuthorId(authorIds: Seq[Long]): DBIO[Map[Long, Seq[BookRow]]] = {
     val action = for {
       book <- Book.filter(_.author_id.inSet(authorIds))
     } yield (book.author_id, book)
     action.result.map(toRowMap)
   }
 
-  def deleteByAuthor(authorId: Int) = {
+  def deleteByAuthor(authorId: Long) = {
     Book.filter(_.author_id === authorId).delete
   }
 }

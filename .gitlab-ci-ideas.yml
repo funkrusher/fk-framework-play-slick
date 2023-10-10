@@ -1,0 +1,48 @@
+
+stages:
+  - package
+  - build
+  - deploy
+
+package:
+  stage: package
+  image: 'hseeberger/scala-sbt:11.0.13_1.5.8_2.13.7'
+  artifacts:
+    paths:
+      - dist/target/universal/dist.zip
+    expire_in: 1 day
+  script:
+    - sbt dist/universal:packageBin --error
+  tags:
+    mytag
+
+
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  needs:
+    - job: package
+      artifacts: true
+  script:
+    - mkdir -p /kaniko/.docker
+    ...
+  tags:
+    mytag
+
+deploy:
+  stage: deploy
+  script:
+    - cd $CI_PROJECT_DIR && cp $APPLICATION_CONF application.conf && cp $LOGBACK logback.xml && cp $DATABASE_ENV database.env && cp $DATABASE_INIT database-init.sql
+    - docker login ...
+    - docker-compose -f docker-compose.env.yml up --no-start
+    - docker cp ./application.conf "$(docker-compose -f docker-compose.env.yml ps -q fk-server)":/app/bin/application.conf
+    - docker cp ./logback.conf "$(docker-compose -f docker-compose.env.yml ps -q fk-server)":/app/bin/logback.conf
+    - docker-compose -f docker-compose.env.yml up -d --no-recreate
+    - docker system prune -af
+  environment:
+    name: xyz
+    url: http://xyz.de
+  tags:
+    mytag

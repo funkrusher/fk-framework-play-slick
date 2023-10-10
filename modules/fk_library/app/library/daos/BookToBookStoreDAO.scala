@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class BookToBookStoreDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit
     ec: ExecutionContext
-) extends MultiKeyDAOImpl[BookToBookStore, BookToBookStoreRow, (String, Int)] {
+) extends MultiKeyDAOImpl[BookToBookStore, BookToBookStoreRow, (String, Long)] {
 
   import profile.api._
 

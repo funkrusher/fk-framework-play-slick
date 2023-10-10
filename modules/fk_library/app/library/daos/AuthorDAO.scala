@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class AuthorDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
-    extends SingleKeyDAO[Author, AuthorRow, Int] {
+    extends SingleKeyDAO[Author, AuthorRow, Long] {
 
   import profile.api._
 
