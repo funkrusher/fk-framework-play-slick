@@ -146,3 +146,7 @@ sbt fk_scheduler/universal:packageBin
 sbt fk_server/universal:packageBin
 
 Ausgabe erfolgt im "target/universal" ordner des jeweiligen projects
+
+----
+
+https://jwt-scala.github.io/jwt-scala/jwt-play-json.html
