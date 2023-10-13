@@ -12,8 +12,8 @@ trait PlayEvolutionsTable {
    *  @param id Database column id SqlType(INT), PrimaryKey
    *  @param hash Database column hash SqlType(VARCHAR), Length(255,true)
    *  @param applied_at Database column applied_at SqlType(TIMESTAMP)
-   *  @param apply_script Database column apply_script SqlType(TEXT), Default(Some(NULL))
-   *  @param revert_script Database column revert_script SqlType(TEXT), Default(Some(NULL))
+   *  @param apply_script Database column apply_script SqlType(LONGTEXT), Length(2147483647,true), Default(Some(NULL))
+   *  @param revert_script Database column revert_script SqlType(LONGTEXT), Length(2147483647,true), Default(Some(NULL))
    *  @param state Database column state SqlType(VARCHAR), Length(255,true), Default(Some(NULL))
    *  @param last_problem Database column last_problem SqlType(TEXT), Default(Some(NULL)) */
   case class PlayEvolutionsRow(id: Int, hash: String, applied_at: java.sql.Timestamp, apply_script: Option[String], revert_script: Option[String], state: Option[String], last_problem: Option[String])
@@ -36,10 +36,10 @@ trait PlayEvolutionsTable {
     val hash: Rep[String] = column[String]("hash", O.Length(255,varying=true))
     /** Database column applied_at SqlType(TIMESTAMP) */
     val applied_at: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("applied_at")
-    /** Database column apply_script SqlType(TEXT), Default(Some(NULL)) */
-    val apply_script: Rep[Option[String]] = column[Option[String]]("apply_script")
-    /** Database column revert_script SqlType(TEXT), Default(Some(NULL)) */
-    val revert_script: Rep[Option[String]] = column[Option[String]]("revert_script")
+    /** Database column apply_script SqlType(LONGTEXT), Length(2147483647,true), Default(Some(NULL)) */
+    val apply_script: Rep[Option[String]] = column[Option[String]]("apply_script", O.Length(2147483647,varying=true))
+    /** Database column revert_script SqlType(LONGTEXT), Length(2147483647,true), Default(Some(NULL)) */
+    val revert_script: Rep[Option[String]] = column[Option[String]]("revert_script", O.Length(2147483647,varying=true))
     /** Database column state SqlType(VARCHAR), Length(255,true), Default(Some(NULL)) */
     val state: Rep[Option[String]] = column[Option[String]]("state", O.Length(255,varying=true))
     /** Database column last_problem SqlType(TEXT), Default(Some(NULL)) */

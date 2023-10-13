@@ -23,6 +23,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
+import scala.reflect.io.Directory
 
 class SlickCodegen {
 
@@ -37,8 +38,8 @@ class SlickCodegen {
     val password     = "codegen"
     val slickDriver  = "slick.jdbc.MySQLProfile"
     val jdbcDriver   = "org.mariadb.jdbc.Driver"
-    val outputDir    = "./fk_core/app"
-    val pkg          = "tables"
+    val outputDir    = "./fk_core/app" // be careful! define the exact path, as it will be deleted during reruns.
+    val pkg          = "core.tables"   // be careful! define the exact package, as it will be deleted during reruns.
 
     // Define the MariaDB test container
     var mariaDBContainer: MariaDBContainer[_] =
@@ -78,9 +79,18 @@ class SlickCodegen {
 
       if (clearOld) {
         println("SlickCodegen - clear old files...")
-        val folder2: String = outputDir + "/" + (pkg.replace(".", "/")) + "/"
-        new File(folder2).delete()
-        println("SlickCodegen - clear old files done!")
+        val folder2: String = outputDir + "/" + (pkg.replace(".", "/"))
+        val deleteFile      = new File(folder2)
+        if (deleteFile.exists()) {
+          val dir     = new Directory(deleteFile)
+          val deleted = dir.deleteRecursively()
+          if (!deleted) {
+            throw new Exception("could not delete old tables! unable to delete.")
+          }
+          println("SlickCodegen - clear old files done! " + deleted)
+        } else {
+          throw new Exception("could not delete old tables! not found.")
+        }
       }
 
       val dbio =
@@ -93,7 +103,7 @@ class SlickCodegen {
         codegen.writeToMultipleFiles(
           profile = slickDriver,
           folder = outputDir,
-          pkg = "core.tables",
+          pkg = pkg,
           container = "Tables",
         )
         println("SlickCodegen - creating files done!")
