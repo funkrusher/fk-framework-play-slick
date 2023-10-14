@@ -10,15 +10,14 @@ lazy val settings = Seq(
 )
 
 // versions
-val playSlickVersion          = "5.1.0"
-val mariadbJavaClientVersion  = "3.1.2"
-val scalazVersion             = "7.3.2"
-val swaggerAnnotationsVersion = "1.6.1"
-val playScalaPdfVersion       = "4.3.0"
-val slickVersion              = "3.4.1"
-val testContainersVersion     = "0.39.3"
-val scalaTestPlusPlay         = "5.1.0"
-val scalaTest                 = "3.2.17.0"
+val playSlickVersion         = "5.1.0"
+val mariadbJavaClientVersion = "3.1.2"
+val scalazVersion            = "7.3.2"
+val playScalaPdfVersion      = "4.3.0"
+val slickVersion             = "3.4.1"
+val testContainersVersion    = "0.39.3"
+val scalaTestPlusPlay        = "5.1.0"
+val scalaTest                = "3.2.17.0"
 
 // dependencies used in most projects
 lazy val dependencies = Seq(
@@ -27,7 +26,6 @@ lazy val dependencies = Seq(
   "com.typesafe.play"      %% "play-slick-evolutions" % playSlickVersion,
   "org.mariadb.jdbc"        % "mariadb-java-client"   % mariadbJavaClientVersion,
   "org.scalaz"             %% "scalaz-core"           % scalazVersion,
-  "io.swagger"              % "swagger-annotations"   % swaggerAnnotationsVersion,
   "com.hhandoko"           %% "play28-scala-pdf"      % playScalaPdfVersion,
   "org.scalatestplus.play" %% "scalatestplus-play"    % scalaTestPlusPlay % "test",
   "org.scalatestplus"      %% "mockito-4-11"          % scalaTest         % "test",
@@ -90,7 +88,7 @@ def addSwaggerUiIfEnabled(prj: Project): Project = {
 
 // fk_server
 lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
-  .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging)
+  .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging, SwaggerPlugin)
   .dependsOn(fk_core, fk_library, fk_store)
   .settings(
     settings,
@@ -104,6 +102,9 @@ lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
     ),
     libraryDependencies ++= dependencies,
     PlayKeys.playDefaultPort := 9000,
+    swaggerV3 := true,
+    swaggerPrettyJson := true,
+    swaggerDomainNameSpaces := Seq("library.dtos", "core.util"),
     // deploy-configuration (dist)
     logLevel := Level.Error,
     Universal / javaOptions ++= Seq(
