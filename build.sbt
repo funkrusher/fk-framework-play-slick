@@ -18,6 +18,7 @@ val slickVersion             = "3.4.1"
 val testContainersVersion    = "0.39.3"
 val scalaTestPlusPlay        = "5.1.0"
 val scalaTest                = "3.2.17.0"
+val jwtPlayJson              = "9.4.4"
 
 // dependencies used in most projects
 lazy val dependencies = Seq(
@@ -27,6 +28,7 @@ lazy val dependencies = Seq(
   "org.mariadb.jdbc"        % "mariadb-java-client"   % mariadbJavaClientVersion,
   "org.scalaz"             %% "scalaz-core"           % scalazVersion,
   "com.hhandoko"           %% "play28-scala-pdf"      % playScalaPdfVersion,
+  "com.github.jwt-scala"   %% "jwt-play-json"         % jwtPlayJson,
   "org.scalatestplus.play" %% "scalatestplus-play"    % scalaTestPlusPlay % "test",
   "org.scalatestplus"      %% "mockito-4-11"          % scalaTest         % "test",
 )
@@ -61,8 +63,8 @@ lazy val fk_library = (project in file("modules/fk_library"))
     libraryDependencies ++= dependencies,
   )
 
-// modules/fk_store
-lazy val fk_store = (project in file("modules/fk_store"))
+// modules/fk_auth
+lazy val fk_auth = (project in file("modules/fk_auth"))
   .enablePlugins(PlayScala)
   .dependsOn(fk_core)
   .aggregate(fk_core)
@@ -89,7 +91,7 @@ def addSwaggerUiIfEnabled(prj: Project): Project = {
 // fk_server
 lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
   .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging, SwaggerPlugin)
-  .dependsOn(fk_core, fk_library, fk_store)
+  .dependsOn(fk_core, fk_library, fk_auth)
   .settings(
     settings,
     Universal / javaOptions ++= Seq(
