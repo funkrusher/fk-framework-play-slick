@@ -1,9 +1,78 @@
 # /api/library
 
-# author
+###
+#  {
+#    "security": [
+#      {
+#        "cookieAuth": []
+#      }
+#    ],
+#    "requestBody": {
+#      "content": {
+#        "application/json": {
+#          "schema": {
+#            "$ref": "#/components/schemas/core.util.QueryParamModel"
+#          },
+#          "examples": {
+#            "example1": {
+#              "summary": "Select all authors with last_name Orwell,Coelho, which have published books in 1948,1945,1988 and return them sorted by last_name ascending",
+#              "value": {
+#                "drop": 0,
+#                "take": 10,
+#                "sorter": {
+#                  "tableName": "author",
+#                  "sortOrder": "asc",
+#                  "sortName": "last_name"
+#                },
+#                "filters": [
+#                  {
+#                    "tableName": "author",
+#                    "filterName": "last_name",
+#                    "filterValue": "Orwell,Coelho",
+#                    "filterComparator": "in"
+#                  },
+#                  {
+#                    "tableName": "book",
+#                    "filterName": "published_in",
+#                    "filterValue": "1948,1945,1988",
+#                    "filterComparator": "in"
+#                  }
+#                ]
+#              }
+#            }
+#          }
+#        }
+#      }
+#    },
+#    "responses": {
+#      "200": {
+#        "description": "success",
+#        "schema": {
+#          "$ref": "#/components/schemas/library.dtos.AuthorPaginateDTO"
+#        }
+#      }
+#    }
+#  }
+###
 POST  /author/paginate                                     library.controllers.AuthorController.paginate
+
+###
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/components/schemas/library.dtos.AuthorDTO'
+###
 POST  /author/add                                          library.controllers.AuthorController.addAuthor
+
+
 POST  /author/delete/:id                                   library.controllers.AuthorController.deleteAuthor(id: Int)
+
+###
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/components/schemas/library.dtos.BookToBookStoreDTO'
+###
 PUT   /bookToBookStore/update                              library.controllers.BookToBookStoreController.update
 
 # authorTransfer
