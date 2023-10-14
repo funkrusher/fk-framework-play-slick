@@ -50,6 +50,9 @@
 #        "schema": {
 #          "$ref": "#/components/schemas/library.dtos.AuthorPaginateDTO"
 #        }
+#      },
+#      "500": {
+#        "description": "internal server error"
 #      }
 #    }
 #  }
