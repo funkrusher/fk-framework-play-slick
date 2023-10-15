@@ -1,22 +1,36 @@
 # /api/library
 
+###
 # $ref: 'library.swagger/author.paginate.post.json'
+###
 POST        /author/paginate                                   library.controllers.AuthorController.paginate
 
+###
 # $ref: 'library.swagger/author.add.post.json'
+###
 POST        /author/add                                        library.controllers.AuthorController.addAuthor
 
+###
 # $ref: 'library.swagger/author.delete.post.json'
+###
 POST        /author/delete/:id                                 library.controllers.AuthorController.deleteAuthor(id: Int)
 
+###
 # $ref: 'library.swagger/bookToBookStore.update.put.json'
+###
 PUT         /bookToBookStore/update                            library.controllers.BookToBookStoreController.update
 
+###
 # $ref: 'library.swagger/author.export.csv.post.json'
+###
 POST        /author/export/csv                                 library.controllers.AuthorTransferController.exportCsv
 
+###
 # $ref: 'library.swagger/author.export.pdf.get.json'
+###
 GET         /author/export/pdf                                 library.controllers.AuthorTransferController.exportPdf
 
+###
 # $ref: 'library.swagger/author.example.testTransactionWithRollback.json'
+###
 GET         /author/example/testTransactionWithRollback        library.controllers.AuthorExampleController.testTransactionWithRollback
