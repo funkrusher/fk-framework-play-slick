@@ -3,9 +3,9 @@ package library.transfers
 import akka.NotUsed
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import core.manager.Manager
-import core.persistence.DbRunner
-import core.util.QueryParamModel
+import foundation.manager.Manager
+import foundation.persistence.DbRunner
+import foundation.util.QueryParamModel
 import library.repositories.AuthorRepository
 import library.transfers.csv.AuthorCsvExport
 import play.api.db.slick.DatabaseConfigProvider

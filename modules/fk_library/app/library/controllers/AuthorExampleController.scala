@@ -1,6 +1,6 @@
 package library.controllers
 
-import core.util.QueryParamModel
+import foundation.util.QueryParamModel
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import library.managers.AuthorManager

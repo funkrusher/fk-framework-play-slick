@@ -1,7 +1,7 @@
 package library.managers
 
-import core.persistence.DbRun
-import core.tables.Tables._
+import foundation.tables.Tables._
+import foundation.persistence.DbRun
 import library.daos.BookToBookStoreDAO
 import library.dtos.BookToBookStoreDTO
 import org.mockito.ArgumentMatchers.any

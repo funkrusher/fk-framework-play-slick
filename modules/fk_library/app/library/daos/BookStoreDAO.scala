@@ -1,7 +1,7 @@
 package library.daos
 
-import core.dao.SingleKeyDAO
-import core.tables.Tables._
+import foundation.dao.SingleKeyDAO
+import foundation.tables.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 
 import javax.inject.Inject

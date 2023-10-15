@@ -38,8 +38,8 @@ class SlickCodegen {
     val password     = "codegen"
     val slickDriver  = "slick.jdbc.MySQLProfile"
     val jdbcDriver   = "org.mariadb.jdbc.Driver"
-    val outputDir    = "./fk_core/app" // be careful! define the exact path, as it will be deleted during reruns.
-    val pkg          = "core.tables"   // be careful! define the exact package, as it will be deleted during reruns.
+    val outputDir    = "./fk_foundation/app" // be careful! define the exact path, as it will be deleted during reruns.
+    val pkg          = "foundation.tables"   // be careful! define the exact package, as it will be deleted during reruns.
 
     // Define the MariaDB test container
     var mariaDBContainer: MariaDBContainer[_] =

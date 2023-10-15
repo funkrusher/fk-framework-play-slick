@@ -11,7 +11,7 @@
 #      "content": {
 #        "application/json": {
 #          "schema": {
-#            "$ref": "#/components/schemas/core.util.QueryParamModel"
+#            "$ref": "#/components/schemas/util.foundation.QueryParamModel"
 #          },
 #          "examples": {
 #            "example1": {

@@ -1,10 +1,9 @@
 package library.managers
 
-import core.error.MappingError
+import foundation.error.MappingError
+import foundation.manager.Manager
 import library.dtos.BookToBookStoreDTO
-import core.manager.Manager
-import core.persistence.DbRun
-import core.persistence.DbRunner
+import foundation.persistence.{DbRun, DbRunner}
 import library.daos.BookToBookStoreDAO
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
