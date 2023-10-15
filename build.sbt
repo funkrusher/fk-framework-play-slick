@@ -73,23 +73,8 @@ lazy val fk_library = (project in file("modules/fk_library"))
     libraryDependencies ++= dependencies,
   )
 
-// modules/fk_swagger_ui
-lazy val fk_swagger_ui = (project in file("modules/fk_swagger_ui"))
-  .enablePlugins(PlayScala)
-  .settings(
-    settings
-  )
-def addSwaggerUiIfEnabled(prj: Project): Project = {
-  val includeSwaggerPlugin: Boolean = sys.props.getOrElse("includeSwaggerPlugin", "false") == "true"
-  if (includeSwaggerPlugin) {
-    prj.dependsOn(fk_swagger_ui)
-  } else {
-    prj
-  }
-}
-
 // fk_server
-lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
+lazy val fk_backend = (project in file("services/fk_backend"))
   .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging, SwaggerPlugin)
   .dependsOn(fk_foundation, fk_core, fk_library)
   .settings(
@@ -105,8 +90,9 @@ lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
     libraryDependencies ++= dependencies,
     PlayKeys.playDefaultPort := 9000,
     swaggerV3 := true,
+    swaggerTarget := new File("./services/fk_backend/conf/swagger-ui"),
     swaggerPrettyJson := true,
-    swaggerDomainNameSpaces := Seq("library.dtos", "core.util"),
+    swaggerDomainNameSpaces := Seq("library.dtos", "foundation.util"),
     // deploy-configuration (dist)
     logLevel := Level.Error,
     Universal / javaOptions ++= Seq(
@@ -132,7 +118,7 @@ lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
   )
 
 // fk_scheduler
-lazy val fk_scheduler = addSwaggerUiIfEnabled(project in file("fk_scheduler"))
+lazy val fk_scheduler = (project in file("services/fk_scheduler"))
   .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging)
   .dependsOn(fk_foundation)
   .settings(
@@ -166,11 +152,11 @@ lazy val fk_scheduler = addSwaggerUiIfEnabled(project in file("fk_scheduler"))
 // root
 lazy val root = project
   .in(file("."))
-  .dependsOn(fk_server, fk_scheduler, fk_codegen)
-  .aggregate(fk_server, fk_scheduler)
+  .dependsOn(fk_backend, fk_scheduler, fk_codegen)
+  .aggregate(fk_backend, fk_scheduler)
   .settings(settings, libraryDependencies ++= dependencies)
 
 // tasks and commands
 TaskKey[Unit]("codegen") := (Compile / runMain).in(fk_codegen).toTask(" codegen.SlickCodegenApp").value
-addCommandAlias("fk_server", ";project fk_server;compile;run")
+addCommandAlias("fk_backend", ";project fk_backend;compile;run")
 addCommandAlias("fk_scheduler", ";project fk_scheduler;compile;run")

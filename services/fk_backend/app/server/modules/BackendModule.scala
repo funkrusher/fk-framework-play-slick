@@ -31,7 +31,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.hhandoko.play.pdf.PdfGenerator
 
-class ServerModule extends AbstractModule {
+class BackendModule extends AbstractModule {
 
   /** Module configuration + binding */
   override def configure(): Unit = {}
