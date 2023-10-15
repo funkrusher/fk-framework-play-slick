@@ -3,7 +3,7 @@ package library.managers
 import foundation.error.MappingError
 import foundation.manager.Manager
 import library.dtos.BookToBookStoreDTO
-import foundation.persistence.{DbRun, DbRunner}
+import foundation.persistence.DbRunner
 import library.daos.BookToBookStoreDAO
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
@@ -15,7 +15,7 @@ import scala.concurrent.Future
 
 @Singleton
 class BookToBookStoreManager @Inject() (
-    dbRun: DbRun,
+    dbRunner: DbRunner,
     bookToBookStoreDAO: BookToBookStoreDAO,
 )(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider)
     extends Manager {
@@ -25,7 +25,7 @@ class BookToBookStoreManager @Inject() (
   protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   def update(bookToBookStore: BookToBookStoreDTO): Future[Either[MappingError, BookToBookStoreDTO]] = {
-    dbRun.run(bookToBookStoreDAO.update(bookToBookStore.toRow())).map(x => Right(bookToBookStore))
+    dbRunner.run(bookToBookStoreDAO.update(bookToBookStore.toRow())).map(x => Right(bookToBookStore))
   }
 
 }

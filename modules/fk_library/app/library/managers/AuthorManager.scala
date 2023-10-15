@@ -20,6 +20,7 @@ import library.repositories.AuthorRepository
 
 @Singleton
 class AuthorManager @Inject() (
+    dbRunner: DbRunner,
     authorRepository: AuthorRepository,
     authorRowDAO: AuthorDAO,
     bookRowDAO: BookDAO,
@@ -34,11 +35,11 @@ class AuthorManager @Inject() (
   import profile.api._
 
   def fetch(authorIds: Seq[Long]): Future[Either[MappingError, Seq[AuthorDTO]]] = {
-    DbRunner.run(authorRepository.fetch(authorIds))
+    dbRunner.run(authorRepository.fetch(authorIds))
   }
 
   def paginate(qParam: QueryParamDTO): Future[Either[MappingError, AuthorPaginateDTO]] = {
-    DbRunner.run(authorRepository.paginate(qParam))
+    dbRunner.run(authorRepository.paginate(qParam))
   }
 
   def delete(authorId: Long): Future[Either[MappingError, Int]] = {
@@ -46,11 +47,11 @@ class AuthorManager @Inject() (
       _            <- bookRowDAO.deleteByAuthor(authorId)
       authorDelete <- authorRowDAO.delete(authorId)
     } yield authorDelete).transactionally
-    DbRunner.run(action).map(Right(_))
+    dbRunner.run(action).map(Right(_))
   }
 
   def insert(author: AuthorDTO): Future[Either[MappingError, AuthorDTO]] = {
-    DbRunner
+    dbRunner
       .run(authorRowDAO.insertAndReturn(author.toRow()))
       .map(x => Right(AuthorDTO.fromRow(x)))
   }

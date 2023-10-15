@@ -7,58 +7,41 @@
             "type" : "string"
           },
           "book_id" : {
-            "type" : "integer",
-            "format" : "int64"
+            "format" : "int64",
+            "type" : "integer"
           },
           "stock" : {
-            "type" : "integer",
+            "nullable" : true,
             "format" : "int32",
-            "nullable" : true
+            "type" : "integer"
           }
         },
         "required" : [ "name", "book_id" ]
       },
       "library.dtos.AuthorPaginateDTO" : {
         "properties" : {
+          "count" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
           "authors" : {
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/library.dtos.AuthorDTO"
             }
-          },
-          "count" : {
-            "type" : "integer",
-            "format" : "int32"
           }
         },
         "required" : [ "authors", "count" ]
       },
-      "foundation.dtos.QueryParamFilterDTO" : {
-        "properties" : {
-          "tableName" : {
-            "type" : "string"
-          },
-          "filterName" : {
-            "type" : "string"
-          },
-          "filterValue" : {
-            "type" : "string"
-          },
-          "filterComparator" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "tableName", "filterName", "filterValue", "filterComparator" ]
-      },
       "foundation.dtos.QueryParamSorterDTO" : {
         "properties" : {
-          "tableName" : {
+          "sortName" : {
             "type" : "string"
           },
           "sortOrder" : {
             "type" : "string"
           },
-          "sortName" : {
+          "tableName" : {
             "type" : "string"
           }
         },
@@ -67,27 +50,59 @@
       "foundation.dtos.QueryParamDTO" : {
         "properties" : {
           "drop" : {
-            "type" : "integer",
+            "nullable" : true,
             "format" : "int32",
-            "nullable" : true
+            "type" : "integer"
           },
           "take" : {
-            "type" : "integer",
+            "nullable" : true,
             "format" : "int32",
-            "nullable" : true
+            "type" : "integer"
           },
           "sorter" : {
             "nullable" : true,
             "$ref" : "#/components/schemas/foundation.dtos.QueryParamSorterDTO"
           },
           "filters" : {
-            "type" : "array",
             "nullable" : true,
+            "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/foundation.dtos.QueryParamFilterDTO"
             }
           }
         }
+      },
+      "library.dtos.BookDTO" : {
+        "properties" : {
+          "bookStores" : {
+            "nullable" : true,
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/library.dtos.BookStoreDTO"
+            }
+          },
+          "language_id" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "id" : {
+            "nullable" : true,
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "author_id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "published_in" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "author_id", "title", "published_in", "language_id" ]
       },
       "library.dtos.BookStoreDTO" : {
         "properties" : {
@@ -97,82 +112,67 @@
         },
         "required" : [ "name" ]
       },
-      "library.dtos.BookDTO" : {
+      "foundation.dtos.QueryParamFilterDTO" : {
         "properties" : {
-          "id" : {
-            "type" : "integer",
-            "format" : "int64",
-            "nullable" : true
-          },
-          "author_id" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "title" : {
+          "filterValue" : {
             "type" : "string"
           },
-          "published_in" : {
-            "type" : "integer",
-            "format" : "int32"
+          "filterName" : {
+            "type" : "string"
           },
-          "language_id" : {
-            "type" : "integer",
-            "format" : "int32"
+          "filterComparator" : {
+            "type" : "string"
           },
-          "bookStores" : {
-            "type" : "array",
-            "nullable" : true,
-            "items" : {
-              "$ref" : "#/components/schemas/library.dtos.BookStoreDTO"
-            }
+          "tableName" : {
+            "type" : "string"
           }
         },
-        "required" : [ "author_id", "title", "published_in", "language_id" ]
+        "required" : [ "tableName", "filterName", "filterValue", "filterComparator" ]
       },
       "library.dtos.AuthorDTO" : {
         "properties" : {
-          "id" : {
-            "type" : "integer",
-            "format" : "int64",
-            "nullable" : true
+          "books" : {
+            "nullable" : true,
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/library.dtos.BookDTO"
+            }
           },
-          "first_name" : {
-            "type" : "string",
-            "nullable" : true
+          "date_of_birth" : {
+            "nullable" : true,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "reviewed_at" : {
+            "nullable" : true,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "created_at" : {
+            "format" : "int32",
+            "type" : "integer"
           },
           "last_name" : {
             "type" : "string"
           },
-          "date_of_birth" : {
+          "id" : {
             "nullable" : true,
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "year_of_birth" : {
-            "type" : "integer",
-            "format" : "int32",
-            "nullable" : true
-          },
-          "created_at" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "reviewed_at" : {
-            "nullable" : true,
-            "type" : "integer",
-            "format" : "int32"
+            "format" : "int64",
+            "type" : "integer"
           },
           "distinguished" : {
-            "type" : "integer",
-            "format" : "int32",
-            "nullable" : true
-          },
-          "books" : {
-            "type" : "array",
             "nullable" : true,
-            "items" : {
-              "$ref" : "#/components/schemas/library.dtos.BookDTO"
-            }
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "first_name" : {
+            "nullable" : true,
+            "type" : "string"
+          },
+          "year_of_birth" : {
+            "nullable" : true,
+            "format" : "int32",
+            "type" : "integer"
           }
         },
         "required" : [ "last_name", "created_at" ]
@@ -188,21 +188,65 @@
   },
   "openapi" : "3.0.0",
   "paths" : {
+    "/api/library/author/delete/{id}" : {
+      "post" : {
+        "operationId" : "deleteAuthor",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "tags" : [ "library" ]
+      }
+    },
+    "/api/library/author/export/csv" : {
+      "post" : {
+        "operationId" : "exportCsv",
+        "tags" : [ "library" ]
+      }
+    },
+    "/api/library/author/example/testTransactionWithRollback" : {
+      "get" : {
+        "operationId" : "testTransactionWithRollback",
+        "tags" : [ "library" ]
+      }
+    },
     "/api/core" : {
       "get" : {
         "operationId" : "index",
         "tags" : [ "core" ]
       }
     },
-    "/api/core/public" : {
-      "get" : {
-        "operationId" : "public",
-        "tags" : [ "core" ]
+    "/api/library/author/add" : {
+      "post" : {
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/library.dtos.AuthorDTO"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "500" : {
+            "description" : "internal server error"
+          }
+        },
+        "operationId" : "addAuthor",
+        "tags" : [ "library" ]
       }
     },
-    "/api/core/priv" : {
+    "/api/core/logout" : {
       "get" : {
-        "operationId" : "priv",
+        "operationId" : "logout",
         "tags" : [ "core" ]
       }
     },
@@ -218,37 +262,43 @@
         "tags" : [ "core" ]
       }
     },
-    "/api/core/login" : {
+    "/api/library/author/export/pdf" : {
       "get" : {
-        "operationId" : "login",
-        "tags" : [ "core" ],
-        "parameters" : [ {
-          "in" : "query",
-          "name" : "username",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "in" : "query",
-          "name" : "password",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ]
+        "operationId" : "exportPdf",
+        "tags" : [ "library" ]
       }
     },
-    "/api/core/logout" : {
+    "/api/library/bookToBookStore/update" : {
+      "put" : {
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/library.dtos.BookToBookStoreDTO"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "500" : {
+            "description" : "internal server error"
+          }
+        },
+        "operationId" : "update",
+        "tags" : [ "library" ]
+      }
+    },
+    "/api/core/priv" : {
       "get" : {
-        "operationId" : "logout",
+        "operationId" : "priv",
         "tags" : [ "core" ]
       }
     },
     "/api/library/author/paginate" : {
       "post" : {
-        "operationId" : "paginate",
-        "tags" : [ "library" ],
         "security" : [ {
           "cookieAuth" : [ ]
         } ],
@@ -265,9 +315,9 @@
                     "drop" : 0,
                     "take" : 10,
                     "sorter" : {
-                      "tableName" : "author",
+                      "sortName" : "last_name",
                       "sortOrder" : "asc",
-                      "sortName" : "last_name"
+                      "tableName" : "author"
                     },
                     "filters" : [ {
                       "tableName" : "author",
@@ -288,94 +338,44 @@
         },
         "responses" : {
           "200" : {
-            "description" : "success",
             "schema" : {
               "$ref" : "#/components/schemas/library.dtos.AuthorPaginateDTO"
-            }
+            },
+            "description" : "success"
           },
           "500" : {
             "description" : "internal server error"
           }
-        }
-      }
-    },
-    "/api/library/author/add" : {
-      "post" : {
-        "operationId" : "addAuthor",
-        "tags" : [ "library" ],
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/library.dtos.AuthorDTO"
-              }
-            }
-          }
         },
-        "responses" : {
-          "500" : {
-            "description" : "internal server error"
-          }
-        }
+        "operationId" : "paginate",
+        "tags" : [ "library" ]
       }
     },
-    "/api/library/author/delete/{id}" : {
-      "post" : {
-        "operationId" : "deleteAuthor",
-        "tags" : [ "library" ],
+    "/api/core/login" : {
+      "get" : {
+        "operationId" : "login",
         "parameters" : [ {
-          "in" : "path",
-          "name" : "id",
+          "in" : "query",
+          "name" : "username",
           "required" : true,
           "schema" : {
-            "format" : "int32",
-            "type" : "integer"
+            "type" : "string"
           }
-        } ]
-      }
-    },
-    "/api/library/bookToBookStore/update" : {
-      "put" : {
-        "operationId" : "update",
-        "tags" : [ "library" ],
-        "security" : [ {
-          "cookieAuth" : [ ]
+        }, {
+          "in" : "query",
+          "name" : "password",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/library.dtos.BookToBookStoreDTO"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "500" : {
-            "description" : "internal server error"
-          }
-        }
+        "tags" : [ "core" ]
       }
     },
-    "/api/library/author/export/csv" : {
-      "post" : {
-        "operationId" : "exportCsv",
-        "tags" : [ "library" ]
-      }
-    },
-    "/api/library/author/export/pdf" : {
+    "/api/core/public" : {
       "get" : {
-        "operationId" : "exportPdf",
-        "tags" : [ "library" ]
-      }
-    },
-    "/api/library/author/example/testTransactionWithRollback" : {
-      "get" : {
-        "operationId" : "testTransactionWithRollback",
-        "tags" : [ "library" ]
+        "operationId" : "public",
+        "tags" : [ "core" ]
       }
     }
   },

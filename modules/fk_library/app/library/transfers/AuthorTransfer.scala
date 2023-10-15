@@ -18,7 +18,8 @@ import scala.concurrent.Future
 
 @Singleton
 class AuthorTransfer @Inject() (
-    authorRepository: AuthorRepository
+    dbRunner: DbRunner,
+    authorRepository: AuthorRepository,
 )(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider)
     extends Manager {
 
@@ -36,7 +37,7 @@ class AuthorTransfer @Inject() (
       .mapAsync(2)(chunkAuthorIds => {
         // spawn multiple futures, that can fetch data from different tables at the same time
         // for this chunk of items.
-        DbRunner.run(authorRepository.fetch(chunkAuthorIds)).flatMap {
+        dbRunner.run(authorRepository.fetch(chunkAuthorIds)).flatMap {
           case Left(error)    => Future.failed(error)
           case Right(authors) => Future.successful(authors)
         }

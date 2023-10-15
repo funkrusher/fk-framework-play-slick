@@ -19,6 +19,7 @@ import scala.concurrent.Future
 
 @Singleton
 class AuthorExampleManager @Inject() (
+    dbRunner: DbRunner,
     authorRepository: AuthorRepository,
     authorDAO: AuthorDAO,
 )(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider)
@@ -49,7 +50,7 @@ class AuthorExampleManager @Inject() (
         DBIO.failed(new Exception("force a rollback of the transaction with this ex-throw!"))
     }.transactionally;
 
-    DbRunner.tryRun(action).map {
+    dbRunner.tryRun(action).map {
       case Left(error) => logger.error("got a db-error, as expected: " + error.message)
       case Right(_)    => logger.error("this should not happen!")
     }

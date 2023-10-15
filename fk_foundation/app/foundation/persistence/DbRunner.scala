@@ -13,8 +13,15 @@ import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object DbRunner {
+@Singleton
+class DbRunner @Inject()()(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider) {
+
+  // We want the JdbcProfile for this provider
+  // it must be defined as protected because we return DBIO as result.
+  protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   val logger: Logger = Logger(this.getClass())
 
@@ -31,9 +38,9 @@ object DbRunner {
    *
    * Only for those cases it makes sense to use this method, to be able to manually react to database-errors.
    *
-   * @param action action
+   * @param action           action
    * @param dbConfigProvider dbConfigProvider
-   * @param ec ec
+   * @param ec               ec
    * @tparam R R
    * @tparam S S
    * @tparam E E
@@ -59,9 +66,9 @@ object DbRunner {
    * If an error occurs during execution this error will let the Future fail silently.
    * Therefore we also Log this error here immediately, so it will not get lost.
    *
-   * @param action action
+   * @param action           action
    * @param dbConfigProvider dbConfigProvider
-   * @param ec ec
+   * @param ec               ec
    * @tparam R R
    * @tparam S S
    * @tparam E E
@@ -75,5 +82,4 @@ object DbRunner {
 
     db.run(action)
   }
-
 }

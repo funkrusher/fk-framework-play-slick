@@ -1,7 +1,7 @@
 package library.managers
 
 import foundation.tables.Tables._
-import foundation.persistence.DbRun
+import foundation.persistence.DbRunner
 import library.daos.BookToBookStoreDAO
 import library.dtos.BookToBookStoreDTO
 import org.mockito.ArgumentMatchers.any
@@ -30,7 +30,7 @@ class BookToBookStoreManagerSpec extends PlaySpec with MockitoSugar {
       val bookToBookStoreDAO = mock[BookToBookStoreDAO]
       when(bookToBookStoreDAO.update(any[BookToBookStoreRow])).thenReturn(DBIO.successful(1))
 
-      val dbRun = mock[DbRun]
+      val dbRun = mock[DbRunner]
       when(dbRun.run(DBIO.successful(1))).thenReturn(Future.successful(1))
 
       val bookToBookStoreManager = new BookToBookStoreManager(dbRun, bookToBookStoreDAO)
