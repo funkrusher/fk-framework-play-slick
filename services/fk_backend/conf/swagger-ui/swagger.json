@@ -188,26 +188,6 @@
   },
   "openapi" : "3.0.0",
   "paths" : {
-    "/" : {
-      "get" : {
-        "operationId" : "healtcheck",
-        "tags" : [ "routes" ]
-      }
-    },
-    "/swagger-ui/{file}" : {
-      "get" : {
-        "operationId" : "serveAsset",
-        "tags" : [ "routes" ],
-        "parameters" : [ {
-          "in" : "path",
-          "name" : "file",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ]
-      }
-    },
     "/api/core" : {
       "get" : {
         "operationId" : "index",

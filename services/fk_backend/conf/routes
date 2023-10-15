@@ -1,7 +1,15 @@
+# ----------------
 # server endpoints
+# ----------------
+
+### NoDocs ###
 GET   /                           server.controllers.HealthcheckController.healtcheck()
+
+### NoDocs ###
 GET   /swagger-ui/*file           server.controllers.SwaggerUiDevController.serveAsset(file: String)
 
+# ----------------
 # modules
+# ----------------
 ->    /api/core                   core.Routes
 ->    /api/library                library.Routes

@@ -29,17 +29,17 @@ class SlickCodegen {
 
   def rebuild(clearOld: Boolean) = {
     println("SlickCodegen - start")
-    val filename        = "./fk_server/conf/application.conf"
-    val applicationConf = new File(filename)
-    val conf            = ConfigFactory.parseFile(applicationConf);
 
-    val databaseName = "mylibrary"
-    val username     = "codegen"
-    val password     = "codegen"
-    val slickDriver  = "slick.jdbc.MySQLProfile"
-    val jdbcDriver   = "org.mariadb.jdbc.Driver"
-    val outputDir    = "./fk_foundation/app" // be careful! define the exact path, as it will be deleted during reruns.
-    val pkg          = "foundation.tables"   // be careful! define the exact package, as it will be deleted during reruns.
+    // lets first define all fixed variables we need.
+    val projectPath    = "./services/fk_backend"
+    val evolutionsPath = projectPath + "/conf/evolutions/default"
+    val databaseName   = "mylibrary"
+    val username       = "codegen"
+    val password       = "codegen"
+    val slickDriver    = "slick.jdbc.MySQLProfile"
+    val jdbcDriver     = "org.mariadb.jdbc.Driver"
+    val outputDir      = "./fk_foundation/app" // be careful! define the exact path, as it will be deleted during reruns.
+    val pkg            = "foundation.tables"   // be careful! define the exact package, as it will be deleted during reruns.
 
     // Define the MariaDB test container
     var mariaDBContainer: MariaDBContainer[_] =
@@ -66,7 +66,7 @@ class SlickCodegen {
       // Create the 'mylibrary' database if it doesn't exist
       createDatabaseIfNotExists(mariaDBContainer.getJdbcUrl, username, password, databaseName)
 
-      val fsEvolutionsReader = new FilesystemEvolutionsReader("./fk_server/conf/evolutions/default")
+      val fsEvolutionsReader = new FilesystemEvolutionsReader(evolutionsPath)
 
       try {
         Evolutions.applyEvolutions(database, fsEvolutionsReader)
@@ -94,7 +94,7 @@ class SlickCodegen {
       }
 
       val dbio =
-        MySQLProfile.createModel(Some(MTable.getTables(Some("mylibrary"), None, None, Some(Seq("TABLE", "VIEW")))))
+        MySQLProfile.createModel(Some(MTable.getTables(Some(databaseName), None, None, Some(Seq("TABLE", "VIEW")))))
       val futureModel                         = db.run(dbio)
       val future: Future[SourceCodeGenerator] = futureModel.map(model => new SimpleCodeGenerator(model))
       try {
