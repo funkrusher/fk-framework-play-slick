@@ -135,7 +135,36 @@ sbt docker:stage
 `sbt test` will run all tests in all sub-projects.
 
 
+```mermaid
+---
+title: Project Relationships
+---
+graph TD
+    subgraph root
+    end
+    subgraph fk_foundation
+    end
+    subgraph fk_codegen
+    end
+    subgraph modules/fk_core
+    end
+    subgraph modules/fk_library
+    end
+    subgraph services/fk_backend
+    end
+    subgraph services/fk_scheduler
+    end
 
+    fk_foundation --> root
+    fk_codegen --> root
+    modules/fk_core --> fk_foundation
+    modules/fk_library --> fk_foundation    
+    modules/fk_library --> modules/fk_core
+    services/fk_backend --> modules/fk_core
+    services/fk_backend --> modules/fk_library
+    services/fk_scheduler --> modules/fk_core
+    services/fk_scheduler --> modules/fk_library    
+```
 
 -------------
 
