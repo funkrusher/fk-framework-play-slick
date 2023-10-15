@@ -1,5 +1,6 @@
 package library.controllers
 
+import foundation.dtos.QueryParamDTO
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import library.managers.AuthorManager
@@ -9,7 +10,6 @@ import play.api.mvc.AbstractController
 import play.api.mvc.Action
 import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
-import foundation.util.{QueryParamFilterModel, QueryParamModel, QueryParamSorterModel}
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,7 +27,7 @@ class AuthorController @Inject() (cc: ControllerComponents, authorManager: Autho
    * @return pagination result
    */
   def paginate =
-    Action.async(parse.json[QueryParamModel]) { implicit request =>
+    Action.async(parse.json[QueryParamDTO]) { implicit request =>
       authorManager.paginate(request.body).map {
         case Left(error)   => InternalServerError(error.message)
         case Right(result) => Ok(Json.toJson(result))

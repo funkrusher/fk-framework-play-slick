@@ -3,6 +3,7 @@ package library.repositories
 import akka.NotUsed
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
+import foundation.dtos.QueryParamDTO
 import play.api.db.slick.DatabaseConfigProvider
 import foundation.tables.Tables._
 import play.api.http.HttpEntity
@@ -11,9 +12,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-import foundation.error.{MappingError, ObjectNotFoundError}
+import foundation.error.MappingError
+import foundation.error.ObjectNotFoundError
 import foundation.repository.Repository
-import foundation.util.QueryParamModel
 import library.daos.AuthorDAO
 import library.daos.BookDAO
 import library.daos.BookStoreDAO
@@ -73,7 +74,7 @@ class AuthorRepository @Inject() (
     )
   }
 
-  def getQueryParamQuery(qParam: QueryParamModel): Query[Rep[Long], Long, Seq] = {
+  def getQueryParamQuery(qParam: QueryParamDTO): Query[Rep[Long], Long, Seq] = {
     val authorFilters = Seq(
       Filter[Option[String]](Author, "first_name", "like"),
       Filter[Option[String]](Author, "first_name", "in"),
@@ -103,7 +104,7 @@ class AuthorRepository @Inject() (
       .map(_._1.id)
   }
 
-  def paginate(qParam: QueryParamModel): DBIO[Either[MappingError, AuthorPaginateDTO]] = {
+  def paginate(qParam: QueryParamDTO): DBIO[Either[MappingError, AuthorPaginateDTO]] = {
     (for {
       ids           <- getQueryParamQuery(qParam).paginate(qParam).resultWithFixOrderedAndGrouped
       count         <- getQueryParamQuery(qParam).distinct.length.result
@@ -114,7 +115,7 @@ class AuthorRepository @Inject() (
     }
   }
 
-  def getIdPublisher(qParam: QueryParamModel): DatabasePublisher[Long] = {
+  def getIdPublisher(qParam: QueryParamDTO): DatabasePublisher[Long] = {
     // we want to fetch the data from the database in chunks of items per network-response from db to us.
     db.stream(
       getQueryParamQuery(qParam).resultWithFixOrderedAndGrouped

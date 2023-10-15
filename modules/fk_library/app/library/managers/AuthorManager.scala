@@ -1,5 +1,6 @@
 package library.managers
 
+import foundation.dtos.QueryParamDTO
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import play.api.db.slick.DatabaseConfigProvider
@@ -12,7 +13,6 @@ import scala.concurrent.Future
 import foundation.error.MappingError
 import foundation.manager.Manager
 import foundation.persistence.DbRunner
-import foundation.util.QueryParamModel
 import library.daos.AuthorDAO
 import library.daos.BookDAO
 import library.daos.BookStoreDAO
@@ -37,7 +37,7 @@ class AuthorManager @Inject() (
     DbRunner.run(authorRepository.fetch(authorIds))
   }
 
-  def paginate(qParam: QueryParamModel): Future[Either[MappingError, AuthorPaginateDTO]] = {
+  def paginate(qParam: QueryParamDTO): Future[Either[MappingError, AuthorPaginateDTO]] = {
     DbRunner.run(authorRepository.paginate(qParam))
   }
 

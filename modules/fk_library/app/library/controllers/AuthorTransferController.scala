@@ -1,7 +1,7 @@
 package library.controllers
 
 import com.hhandoko.play.pdf.PdfGenerator
-import foundation.util.QueryParamModel
+import foundation.dtos.QueryParamDTO
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import library.managers.AuthorManager
@@ -33,7 +33,7 @@ class AuthorTransferController @Inject() (
    * @return streaming result as csv-export
    */
   def exportCsv =
-    Action.async(parse.json[QueryParamModel]) { implicit request =>
+    Action.async(parse.json[QueryParamDTO]) { implicit request =>
       Future.successful(
         Result(
           header = ResponseHeader(OK, Map(CONTENT_DISPOSITION -> s"attachment; filename=authors.csv")),

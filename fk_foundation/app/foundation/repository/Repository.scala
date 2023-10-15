@@ -1,19 +1,20 @@
 package foundation.repository
 
+import foundation.dtos.QueryParamDTO
+import foundation.dtos.QueryParamFilterDTO
+import foundation.dtos.QueryParamSorterDTO
 import play.api.Logger
 import play.api.db.slick.HasDatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import slick.lifted.AbstractTable
 import slick.lifted.CanBeQueryCondition
 import slick.lifted.ColumnOrdered
-import foundation.util.{QueryParamFilterModel, QueryParamModel, QueryParamSorterModel}
 import slick.ast.Ordering
 import slick.sql.SqlAction
 
 import java.lang.reflect.Method
 import scala.collection.mutable
 import scala.reflect.runtime.universe._
-
 import scala.collection.mutable.{ Map => MutableMap }
 
 abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
@@ -41,7 +42,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   def createConditionList(
-      filters: Seq[(Filter[_], QueryParamFilterModel)],
+      filters: Seq[(Filter[_], QueryParamFilterDTO)],
       table: AnyRef,
   ): List[Rep[Option[Boolean]]] = {
     filters
@@ -55,7 +56,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   def createConditions(
-      activeFilters: Option[Seq[(Filter[_], QueryParamFilterModel)]],
+      activeFilters: Option[Seq[(Filter[_], QueryParamFilterDTO)]],
       table: AnyRef,
   ): Rep[Option[Boolean]] = {
     if (activeFilters.isDefined && activeFilters.get.size > 0) {
@@ -68,7 +69,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   def createSorting(
-      activeSorter: Option[(Sorter[_], QueryParamSorterModel)],
+      activeSorter: Option[(Sorter[_], QueryParamSorterDTO)],
       table: AnyRef,
   ): Either[java.lang.Throwable, ColumnOrdered[Any]] = {
     if (activeSorter.isDefined) {
@@ -82,9 +83,9 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   def resolveActiveFilters(
-      tableQueryFilters: Seq[QueryParamFilterModel],
+      tableQueryFilters: Seq[QueryParamFilterDTO],
       columnFilters: Seq[Filter[_]],
-  ): Seq[(Filter[_], QueryParamFilterModel)] = {
+  ): Seq[(Filter[_], QueryParamFilterDTO)] = {
     val result = tableQueryFilters
       .map(tableQueryFilter => {
         val maybeFound = columnFilters.find(x =>
@@ -100,7 +101,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   def resolveActiveSorter(
-      tableQuerySorter: QueryParamSorterModel,
+      tableQuerySorter: QueryParamSorterDTO,
       columnSorters: Seq[Sorter[_]],
   ) = {
     val maybeFound = columnSorters.find(x =>
@@ -113,7 +114,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   implicit class FilterQuery[A <: AbstractTable[_]](q: TableQuery[A]) {
-    def applyFilters(qParam: QueryParamModel, filters: Seq[Filter[_]]): Query[A, Any, Seq] = {
+    def applyFilters(qParam: QueryParamDTO, filters: Seq[Filter[_]]): Query[A, Any, Seq] = {
       val table = q.baseTableRow.asInstanceOf[Table[_]]
 
       // find filters
@@ -134,7 +135,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   implicit class SortQuery[E <: Product, U <: Product](q: Query[E, U, Seq]) {
-    def applySorter(qParam: QueryParamModel, sorters: Seq[Sorter[_]]): Query[E, U, Seq] = {
+    def applySorter(qParam: QueryParamDTO, sorters: Seq[Sorter[_]]): Query[E, U, Seq] = {
       qParam.sorter match {
         case Some(sorter) =>
           q.sortBy(container => {
@@ -161,7 +162,7 @@ abstract class Repository extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
   implicit class PaginateQuery[A](q: Query[Rep[A], A, Seq]) {
-    def paginate(qParam: QueryParamModel): Query[Rep[A], A, Seq] = {
+    def paginate(qParam: QueryParamDTO): Query[Rep[A], A, Seq] = {
       var query = q
       query = if (qParam.drop.isDefined) query.drop(qParam.drop.get) else query
       query = if (qParam.take.isDefined) query.take(qParam.take.get) else query

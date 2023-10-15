@@ -3,7 +3,6 @@ package core.managers
 import foundation.error.MappingError
 import foundation.manager.Manager
 import foundation.persistence.DbRunner
-import foundation.util.QueryParamModel
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 

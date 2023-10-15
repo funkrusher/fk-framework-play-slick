@@ -1,7 +1,6 @@
 package core.controllers
 
 import core.managers.AuthManager
-import foundation.util.QueryParamModel
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.AbstractController

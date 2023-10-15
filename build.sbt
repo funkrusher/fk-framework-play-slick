@@ -92,7 +92,7 @@ lazy val fk_backend = (project in file("services/fk_backend"))
     swaggerV3 := true,
     swaggerTarget := new File("./services/fk_backend/conf/swagger-ui"),
     swaggerPrettyJson := true,
-    swaggerDomainNameSpaces := Seq("library.dtos", "foundation.util"),
+    swaggerDomainNameSpaces := Seq("foundation.dtos", "core.dtos", "library.dtos"),
     // deploy-configuration (dist)
     logLevel := Level.Error,
     Universal / javaOptions ++= Seq(
