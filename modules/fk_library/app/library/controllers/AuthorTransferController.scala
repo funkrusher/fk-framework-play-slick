@@ -1,7 +1,7 @@
 package library.controllers
 
 import com.hhandoko.play.pdf.PdfGenerator
-import core.util.QueryParamModel
+import foundation.util.QueryParamModel
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
 import library.managers.AuthorManager

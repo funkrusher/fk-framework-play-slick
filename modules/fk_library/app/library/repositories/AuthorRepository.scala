@@ -3,18 +3,17 @@ package library.repositories
 import akka.NotUsed
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import core.error.MappingError
-import core.error.ObjectNotFoundError
-import core.repository.Repository
 import play.api.db.slick.DatabaseConfigProvider
-import core.tables.Tables._
+import foundation.tables.Tables._
 import play.api.http.HttpEntity
 
 import javax.inject.Inject
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-import core.util.QueryParamModel
+import foundation.error.{MappingError, ObjectNotFoundError}
+import foundation.repository.Repository
+import foundation.util.QueryParamModel
 import library.daos.AuthorDAO
 import library.daos.BookDAO
 import library.daos.BookStoreDAO

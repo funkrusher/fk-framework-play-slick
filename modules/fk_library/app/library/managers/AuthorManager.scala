@@ -1,10 +1,7 @@
 package library.managers
 
-import core.error.MappingError
 import library.dtos.AuthorDTO
 import library.dtos.AuthorPaginateDTO
-import core.manager.Manager
-import core.persistence.DbRunner
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -12,7 +9,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-import core.util.QueryParamModel
+import foundation.error.MappingError
+import foundation.manager.Manager
+import foundation.persistence.DbRunner
+import foundation.util.QueryParamModel
 import library.daos.AuthorDAO
 import library.daos.BookDAO
 import library.daos.BookStoreDAO

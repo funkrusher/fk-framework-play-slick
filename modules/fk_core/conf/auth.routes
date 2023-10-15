@@ -1,0 +1,11 @@
+# /api/core
+
+
+# An example controller showing a sample home page
+GET     /                           core.controllers.HomeController.index
+GET     /public                     core.controllers.HomeController.public
+GET     /priv                       core.controllers.HomeController.priv
+GET     /priv-play                  core.controllers.HomeController.privPlay
+GET     /priv-action                core.controllers.HomeController.privAction
+GET     /login                      core.controllers.HomeController.login(username, password)
+GET     /logout                     core.controllers.HomeController.logout

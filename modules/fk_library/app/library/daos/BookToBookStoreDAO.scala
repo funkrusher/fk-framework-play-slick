@@ -1,9 +1,8 @@
 package library.daos
 
 import com.google.inject.ImplementedBy
-import core.dao.MultiKeyDAO
-import core.dao.MultiKeyDAOImpl
-import core.tables.Tables._
+import foundation.dao.{MultiKeyDAO, MultiKeyDAOImpl}
+import foundation.tables.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.lifted.AbstractTable
 

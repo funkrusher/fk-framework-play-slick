@@ -46,8 +46,18 @@ lazy val fk_codegen = (project in file("fk_codegen"))
   )
 
 // fk_core
-lazy val fk_core = (project in file("fk_core"))
+lazy val fk_foundation = (project in file("fk_foundation"))
   .enablePlugins(PlayScala)
+  .settings(
+    settings,
+    libraryDependencies ++= dependencies,
+  )
+
+// modules/fk_core
+lazy val fk_core = (project in file("modules/fk_core"))
+  .enablePlugins(PlayScala)
+  .dependsOn(fk_foundation)
+  .aggregate(fk_foundation)
   .settings(
     settings,
     libraryDependencies ++= dependencies,
@@ -56,18 +66,8 @@ lazy val fk_core = (project in file("fk_core"))
 // modules/fk_library
 lazy val fk_library = (project in file("modules/fk_library"))
   .enablePlugins(PlayScala)
-  .dependsOn(fk_core)
-  .aggregate(fk_core)
-  .settings(
-    settings,
-    libraryDependencies ++= dependencies,
-  )
-
-// modules/fk_auth
-lazy val fk_auth = (project in file("modules/fk_auth"))
-  .enablePlugins(PlayScala)
-  .dependsOn(fk_core)
-  .aggregate(fk_core)
+  .dependsOn(fk_foundation)
+  .aggregate(fk_foundation)
   .settings(
     settings,
     libraryDependencies ++= dependencies,
@@ -91,7 +91,7 @@ def addSwaggerUiIfEnabled(prj: Project): Project = {
 // fk_server
 lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
   .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging, SwaggerPlugin)
-  .dependsOn(fk_core, fk_library, fk_auth)
+  .dependsOn(fk_foundation, fk_core, fk_library)
   .settings(
     settings,
     Universal / javaOptions ++= Seq(
@@ -134,7 +134,7 @@ lazy val fk_server = addSwaggerUiIfEnabled(project in file("fk_server"))
 // fk_scheduler
 lazy val fk_scheduler = addSwaggerUiIfEnabled(project in file("fk_scheduler"))
   .enablePlugins(PlayScala, UniversalPlugin, JavaAppPackaging)
-  .dependsOn(fk_core)
+  .dependsOn(fk_foundation)
   .settings(
     settings,
     libraryDependencies ++= dependencies,

@@ -1,9 +1,9 @@
 package library.dtos
 
-import core.dto.DTOImplicits
+import foundation.dto.DTOImplicits
 import play.api.libs.json.Json
 import play.api.libs.json.OFormat
-import core.tables.Tables._
+import foundation.tables.Tables._
 
 case class BookToBookStoreDTO(
     name: String,
