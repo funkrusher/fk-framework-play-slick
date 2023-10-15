@@ -1,0 +1,21 @@
+{
+  "security": [
+    {
+      "cookieAuth": []
+    }
+  ],
+  "requestBody": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/library.dtos.BookToBookStoreDTO"
+        }
+      }
+    }
+  },
+  "responses": {
+    "500": {
+      "description": "internal server error"
+    }
+  }
+}

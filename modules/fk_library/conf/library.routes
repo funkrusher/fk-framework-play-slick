@@ -1,86 +1,22 @@
 # /api/library
 
-###
-#  {
-#    "security": [
-#      {
-#        "cookieAuth": []
-#      }
-#    ],
-#    "requestBody": {
-#      "content": {
-#        "application/json": {
-#          "schema": {
-#            "$ref": "#/components/schemas/foundation.dtos.QueryParamDTO"
-#          },
-#          "examples": {
-#            "example1": {
-#              "summary": "Select all authors with last_name Orwell,Coelho, which have published books in 1948,1945,1988 and return them sorted by last_name ascending",
-#              "value": {
-#                "drop": 0,
-#                "take": 10,
-#                "sorter": {
-#                  "tableName": "author",
-#                  "sortOrder": "asc",
-#                  "sortName": "last_name"
-#                },
-#                "filters": [
-#                  {
-#                    "tableName": "author",
-#                    "filterName": "last_name",
-#                    "filterValue": "Orwell,Coelho",
-#                    "filterComparator": "in"
-#                  },
-#                  {
-#                    "tableName": "book",
-#                    "filterName": "published_in",
-#                    "filterValue": "1948,1945,1988",
-#                    "filterComparator": "in"
-#                  }
-#                ]
-#              }
-#            }
-#          }
-#        }
-#      }
-#    },
-#    "responses": {
-#      "200": {
-#        "description": "success",
-#        "schema": {
-#          "$ref": "#/components/schemas/library.dtos.AuthorPaginateDTO"
-#        }
-#      },
-#      "500": {
-#        "description": "internal server error"
-#      }
-#    }
-#  }
-###
-POST  /author/paginate                                     library.controllers.AuthorController.paginate
+# $ref: 'library.swagger/author.paginate.post.json'
+POST        /author/paginate                                   library.controllers.AuthorController.paginate
 
-###
-#  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/components/schemas/library.dtos.AuthorDTO'
-###
-POST  /author/add                                          library.controllers.AuthorController.addAuthor
+# $ref: 'library.swagger/author.add.post.json'
+POST        /author/add                                        library.controllers.AuthorController.addAuthor
 
+# $ref: 'library.swagger/author.delete.post.json'
+POST        /author/delete/:id                                 library.controllers.AuthorController.deleteAuthor(id: Int)
 
-POST  /author/delete/:id                                   library.controllers.AuthorController.deleteAuthor(id: Int)
+# $ref: 'library.swagger/bookToBookStore.update.put.json'
+PUT         /bookToBookStore/update                            library.controllers.BookToBookStoreController.update
 
-###
-#  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/components/schemas/library.dtos.BookToBookStoreDTO'
-###
-PUT   /bookToBookStore/update                              library.controllers.BookToBookStoreController.update
+# $ref: 'library.swagger/author.export.csv.post.json'
+POST        /author/export/csv                                 library.controllers.AuthorTransferController.exportCsv
 
-# authorTransfer
-POST  /author/export/csv                                   library.controllers.AuthorTransferController.exportCsv
-GET  /author/export/pdf                                    library.controllers.AuthorTransferController.exportPdf
+# $ref: 'library.swagger/author.export.pdf.get.json'
+GET         /author/export/pdf                                 library.controllers.AuthorTransferController.exportPdf
 
-# authorExample
-GET   /author/example/testTransactionWithRollback          library.controllers.AuthorExampleController.testTransactionWithRollback
+# $ref: 'library.swagger/author.example.testTransactionWithRollback.json'
+GET         /author/example/testTransactionWithRollback        library.controllers.AuthorExampleController.testTransactionWithRollback
