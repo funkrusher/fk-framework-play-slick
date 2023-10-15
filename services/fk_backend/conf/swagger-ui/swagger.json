@@ -1,0 +1,390 @@
+{
+  "components" : {
+    "schemas" : {
+      "library.dtos.BookToBookStoreDTO" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "book_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "stock" : {
+            "type" : "integer",
+            "format" : "int32",
+            "nullable" : true
+          }
+        },
+        "required" : [ "name", "book_id" ]
+      },
+      "library.dtos.AuthorPaginateDTO" : {
+        "properties" : {
+          "authors" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/library.dtos.AuthorDTO"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "authors", "count" ]
+      },
+      "foundation.util.QueryParamFilterModel" : {
+        "properties" : {
+          "tableName" : {
+            "type" : "string"
+          },
+          "filterName" : {
+            "type" : "string"
+          },
+          "filterValue" : {
+            "type" : "string"
+          },
+          "filterComparator" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "tableName", "filterName", "filterValue", "filterComparator" ]
+      },
+      "foundation.util.QueryParamSorterModel" : {
+        "properties" : {
+          "tableName" : {
+            "type" : "string"
+          },
+          "sortOrder" : {
+            "type" : "string"
+          },
+          "sortName" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "tableName", "sortOrder", "sortName" ]
+      },
+      "foundation.util.QueryParamModel" : {
+        "properties" : {
+          "drop" : {
+            "type" : "integer",
+            "format" : "int32",
+            "nullable" : true
+          },
+          "take" : {
+            "type" : "integer",
+            "format" : "int32",
+            "nullable" : true
+          },
+          "sorter" : {
+            "nullable" : true,
+            "$ref" : "#/components/schemas/foundation.util.QueryParamSorterModel"
+          },
+          "filters" : {
+            "type" : "array",
+            "nullable" : true,
+            "items" : {
+              "$ref" : "#/components/schemas/foundation.util.QueryParamFilterModel"
+            }
+          }
+        }
+      },
+      "library.dtos.BookStoreDTO" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "library.dtos.BookDTO" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "nullable" : true
+          },
+          "author_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "published_in" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "language_id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "bookStores" : {
+            "type" : "array",
+            "nullable" : true,
+            "items" : {
+              "$ref" : "#/components/schemas/library.dtos.BookStoreDTO"
+            }
+          }
+        },
+        "required" : [ "author_id", "title", "published_in", "language_id" ]
+      },
+      "library.dtos.AuthorDTO" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "nullable" : true
+          },
+          "first_name" : {
+            "type" : "string",
+            "nullable" : true
+          },
+          "last_name" : {
+            "type" : "string"
+          },
+          "date_of_birth" : {
+            "nullable" : true,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "year_of_birth" : {
+            "type" : "integer",
+            "format" : "int32",
+            "nullable" : true
+          },
+          "created_at" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "reviewed_at" : {
+            "nullable" : true,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "distinguished" : {
+            "type" : "integer",
+            "format" : "int32",
+            "nullable" : true
+          },
+          "books" : {
+            "type" : "array",
+            "nullable" : true,
+            "items" : {
+              "$ref" : "#/components/schemas/library.dtos.BookDTO"
+            }
+          }
+        },
+        "required" : [ "last_name", "created_at" ]
+      }
+    },
+    "securitySchemes" : {
+      "cookieAuth" : {
+        "type" : "apiKey",
+        "in" : "cookie",
+        "name" : "JSESSIONID"
+      }
+    }
+  },
+  "openapi" : "3.0.0",
+  "paths" : {
+    "/" : {
+      "get" : {
+        "operationId" : "healtcheck",
+        "tags" : [ "routes" ]
+      }
+    },
+    "/swagger-ui/{file}" : {
+      "get" : {
+        "operationId" : "serveAsset",
+        "tags" : [ "routes" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "file",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      }
+    },
+    "/api/core" : {
+      "get" : {
+        "operationId" : "index",
+        "tags" : [ "core" ]
+      }
+    },
+    "/api/core/public" : {
+      "get" : {
+        "operationId" : "public",
+        "tags" : [ "core" ]
+      }
+    },
+    "/api/core/priv" : {
+      "get" : {
+        "operationId" : "priv",
+        "tags" : [ "core" ]
+      }
+    },
+    "/api/core/priv-play" : {
+      "get" : {
+        "operationId" : "privPlay",
+        "tags" : [ "core" ]
+      }
+    },
+    "/api/core/priv-action" : {
+      "get" : {
+        "operationId" : "privAction",
+        "tags" : [ "core" ]
+      }
+    },
+    "/api/core/login" : {
+      "get" : {
+        "operationId" : "login",
+        "tags" : [ "core" ],
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "username",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "password",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      }
+    },
+    "/api/core/logout" : {
+      "get" : {
+        "operationId" : "logout",
+        "tags" : [ "core" ]
+      }
+    },
+    "/api/library/author/paginate" : {
+      "post" : {
+        "operationId" : "paginate",
+        "tags" : [ "library" ],
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/foundation.util.QueryParamModel"
+              },
+              "examples" : {
+                "example1" : {
+                  "summary" : "Select all authors with last_name Orwell,Coelho, which have published books in 1948,1945,1988 and return them sorted by last_name ascending",
+                  "value" : {
+                    "drop" : 0,
+                    "take" : 10,
+                    "sorter" : {
+                      "tableName" : "author",
+                      "sortOrder" : "asc",
+                      "sortName" : "last_name"
+                    },
+                    "filters" : [ {
+                      "tableName" : "author",
+                      "filterName" : "last_name",
+                      "filterValue" : "Orwell,Coelho",
+                      "filterComparator" : "in"
+                    }, {
+                      "tableName" : "book",
+                      "filterName" : "published_in",
+                      "filterValue" : "1948,1945,1988",
+                      "filterComparator" : "in"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "schema" : {
+              "$ref" : "#/components/schemas/library.dtos.AuthorPaginateDTO"
+            }
+          },
+          "500" : {
+            "description" : "internal server error"
+          }
+        }
+      }
+    },
+    "/api/library/author/add" : {
+      "post" : {
+        "operationId" : "addAuthor",
+        "tags" : [ "library" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "schema" : {
+            "$ref" : "#/components/schemas/library.dtos.AuthorDTO"
+          }
+        } ],
+        "consumes" : [ "application/json" ]
+      }
+    },
+    "/api/library/author/delete/{id}" : {
+      "post" : {
+        "operationId" : "deleteAuthor",
+        "tags" : [ "library" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ]
+      }
+    },
+    "/api/library/bookToBookStore/update" : {
+      "put" : {
+        "operationId" : "update",
+        "tags" : [ "library" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "schema" : {
+            "$ref" : "#/components/schemas/library.dtos.BookToBookStoreDTO"
+          }
+        } ],
+        "consumes" : [ "application/json" ]
+      }
+    },
+    "/api/library/author/export/csv" : {
+      "post" : {
+        "operationId" : "exportCsv",
+        "tags" : [ "library" ]
+      }
+    },
+    "/api/library/author/export/pdf" : {
+      "get" : {
+        "operationId" : "exportPdf",
+        "tags" : [ "library" ]
+      }
+    },
+    "/api/library/author/example/testTransactionWithRollback" : {
+      "get" : {
+        "operationId" : "testTransactionWithRollback",
+        "tags" : [ "library" ]
+      }
+    }
+  },
+  "info" : {
+    "description" : "Example Project for a Backend Server-Framework using Play/Slick",
+    "title" : "Funkrusher Framework",
+    "version" : "1.0-SNAPSHOT"
+  },
+  "tags" : [ ]
+}

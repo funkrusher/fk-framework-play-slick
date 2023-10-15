@@ -1,8 +1,11 @@
 package core.controllers
 
-import auth.controllers.routes
-import core.controllers.helpers.{UserAction, UserRequest}
-import core.models.{SessionDAO, User, UserDAO}
+import core.controllers.routes
+import core.controllers.helpers.UserAction
+import core.controllers.helpers.UserRequest
+import core.models.SessionDAO
+import core.models.User
+import core.models.UserDAO
 
 import java.time.LocalDateTime
 import java.time.ZoneOffset
